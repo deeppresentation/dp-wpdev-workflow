@@ -1,5 +1,5 @@
 {
-    "name": "deeppresentation/dp-intro-tours",
+    "name": "deeppresentation/{project-slug}",
     "description": "",
     "type": "project",
     "license": "MIT",

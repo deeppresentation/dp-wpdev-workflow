@@ -1,5 +1,5 @@
-const DpWf = require('./dp-dev-workflow/DpWf');
-const dpwfconfig = require('./dp-dev-workflow.json');
+const DpWf = require('./dp-wpdev-workflow/DpWf');
+const dpwfconfig = require('./dp-wpdev-workflow.json');
 const gulp = require( 'gulp' ); 
 
 new DpWf(dpwfconfig);

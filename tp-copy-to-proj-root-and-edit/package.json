@@ -21,7 +21,7 @@
     "bootstrap": "wpackio-scripts bootstrap",
     "build": "wpackio-scripts build",
     "start": "wpackio-scripts start",
-    "pack": "node dp-dev-workflow/wpackio-pack-fixer",
+    "pack": "node dp-wpdev-workflow/wpackio-pack-fixer",
     "deploy2git": "gulp deploy2git",
     "deploy2ftp": "gulp deploy2ftp",
     "clearftp": "gulp clearftp",

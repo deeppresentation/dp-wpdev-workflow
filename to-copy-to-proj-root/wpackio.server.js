@@ -1,4 +1,4 @@
-const dpwf = require('./dp-dev-workflow.json');
+const dpwf = require('./dp-wpdev-workflow.json');
 
 module.exports = {
 	// Your LAN IP or host where you would want the live server

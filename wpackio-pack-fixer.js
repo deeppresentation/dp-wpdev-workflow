@@ -1,6 +1,6 @@
 const del = require('del');
 const npmRunScript = require('npm-run-script');
-const dpwf = require('../dp-dev-workflow.json');
+const dpwf = require('../dp-wpdev-workflow.json');
 const path = require('upath');
 const term = require( 'terminal-kit' ).terminal;
 
