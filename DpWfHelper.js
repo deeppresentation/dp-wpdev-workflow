@@ -1,4 +1,4 @@
-const dpwf = require('../dp-dev-workflow.json');
+const dpwf = require('../dp-wpdev-workflow.json');
 const fs = require('fs-extra');
 const term = require( 'terminal-kit' ).terminal;
 
@@ -39,5 +39,5 @@ module.exports.getEntryAssetFiles = function () {
 }
 
 module.exports.writeBuildTypePhp = function () {
-    fs.outputFileSync('./dp-dev-workflow/dp-build-type.php', `<?php define('BUILD_TYPE', '${dpwf.buildType}'); ?>`);
+    fs.outputFileSync('./dp-wpdev-workflow/dp-build-type.php', `<?php define('BUILD_TYPE', '${dpwf.buildType}'); ?>`);
 }
