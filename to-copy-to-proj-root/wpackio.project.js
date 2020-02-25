@@ -25,7 +25,7 @@ module.exports = {
 	// Used to generate banners on top of compiled stuff
 	bannerConfig: {
 		name: dpwf.title,
-		author: dpwf.autor,
+		author: dpwf.author,
 		license: dpwf.license[`type${dpwf.buildType}`],
 		link: dpwf.license[`link${dpwf.buildType}`],
 		version: pkg.version,

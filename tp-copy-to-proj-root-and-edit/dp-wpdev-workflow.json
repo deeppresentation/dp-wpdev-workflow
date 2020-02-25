@@ -2,7 +2,7 @@
     "id": "{project-slug}",
     "title": "{Human read name}",
     "type": "{plugin-or-theme}",
-    "autor": "Tomas Groulik <tomas.groulik@gmail.com>",
+    "author": "Tomas Groulik <tomas.groulik@gmail.com>",
     "buildType": "{PRO-or-FREE}",
     "hasReact": false,
     "hasSass": true,
