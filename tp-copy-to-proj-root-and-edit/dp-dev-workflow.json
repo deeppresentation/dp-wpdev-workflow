@@ -1,0 +1,65 @@
+{
+    "id": "{project-slug}",
+    "label": "{Human read name}",
+    "type": "{plugin-or-theme}",
+    "autor": "Tomas Groulik <tomas.groulik@gmail.com>",
+    "buildType": "{PRO-or-FREE}",
+    "hasReact": false,
+    "hasSass": true,
+    "license":{
+        "type": "GPL-2.0+",
+        "typePRO": "PRO LICENSE TO BE DEFINED",
+        "link": "http://www.gnu.org/licenses/gpl-2.0.txt",
+        "linkPRO": "PRO LICENSE LINK TO BE DEFINED",
+        "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpres.org plugin repositary",
+        "copyrightTextPRO": "PRO CREDENTIALS TO BE DEFINED"
+    },
+    "assets":{
+        "dir": "dist",
+        "files":{
+            "scriptId1": "{./public/assets/js/script-FREE&PRO.js}",
+            "style1": "{./public/assets/js/script-FREE&PRO>.js}",
+            "scriptId3": "..."
+        },
+        "filesFREE":{
+            "scriptId2": "{./public/assets/js/script-FREE>.js}",
+            "style2": "{./public/assets/css/style>.css}",
+            "style3": "..."
+        },
+        "filesPRO":{
+            "scriptId2": "{./public/assets/js/script-PRO>.js}",
+            "style2": "{./public/assets/css/style-PRO>.css}",
+            "style3": "..."
+        }
+    },
+    "watch": [
+        "{reload-after-change/*.php}",
+        "{reload-after-change-2/**/*.php}",
+        "..."
+    ],
+    "package": {
+        "dir": "./package",
+        "files": [
+            "{deep-dir-of-php-to-inc-into-deploy-pack/**/*.php}",
+            "{shallow-dir-of-css-to-inc-into-deploy-pack/*.css}",
+            "..."
+        ],
+        "filesFREE": [],
+        "filesPRO":[
+            "PRO/**/*.php"
+        ]
+    },
+
+    "server": {
+        "proxy": "localhost/",
+        "browserAutoOpen": true,
+        "browserSyncNotify": false
+    },
+    "ftp": {
+        "host": "235234.w34.wedos.net",
+        "user": "w235234",
+        "password": "viG81IwWC964CMpfiAw!",
+        "parallel": 10,
+        "baseDir": "www/domains/islander.live/wp-content/plugins/dp-intro-tours"
+    }
+}

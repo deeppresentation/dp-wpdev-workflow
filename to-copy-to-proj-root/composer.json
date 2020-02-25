@@ -1,0 +1,18 @@
+{
+    "name": "deeppresentation/dp-intro-tours",
+    "description": "",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomáš Groulík <deeppresentation>",
+            "email": "info@deeppresentation.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "wpackio/enqueue": "^2.1",
+        "deeppresentation/php-wordpress-std": "dev-master",
+        "deeppresentation/php-std": "dev-master"
+    }
+}

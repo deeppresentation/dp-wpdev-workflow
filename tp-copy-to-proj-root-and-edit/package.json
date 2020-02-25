@@ -1,0 +1,37 @@
+{
+  "name": "dp-intro-tours",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@wpackio/scripts": "^4.3.0",
+    "fs-extra": "^8.1.0",
+    "gulp": "^4.0.2",
+    "gulp-composer": "^0.4.5",
+    "node-find-folder": "^0.1.32",
+    "node-notifier": "^5.4.3",
+    "node-sass": "^4.13.1",
+    "npm-run-script": "0.0.4",
+    "simple-git": "^1.126.0",
+    "terminal-kit": "^1.33.15",
+    "upath": "^1.2.0",
+    "vinyl-ftp": "^0.6.1",
+    "yargs": "^13.3.0"
+  },
+  "scripts": {
+    "bootstrap": "wpackio-scripts bootstrap",
+    "build": "wpackio-scripts build",
+    "start": "wpackio-scripts start",
+    "pack": "node dp-dev-workflow/wpackio-pack-fixer",
+    "deploy2git": "gulp deploy2git",
+    "deploy2ftp": "gulp deploy2ftp",
+    "clearftp": "gulp clearftp",
+    "updategm": "gulp updategm",
+    "pushgm": "gulp pushgm"
+  },
+  "dependencies": {
+    "@wpackio/entrypoint": "^4.3.0",
+    "intro.js": "^2.9.3",
+    "url-parse": "^1.4.7",
+    "waypoints": "^4.0.1"
+  }
+}
