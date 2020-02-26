@@ -1,8 +1,8 @@
 {
     "id": "{project-slug}",
-    "label": "{Human read name}",
+    "title": "{Human read name}",
     "type": "{plugin-or-theme}",
-    "autor": "Tomas Groulik <tomas.groulik@gmail.com>",
+    "author": "Tomas Groulik <tomas.groulik@gmail.com>",
     "buildType": "{PRO-or-FREE}",
     "hasReact": false,
     "hasSass": true,
@@ -46,7 +46,7 @@
         ],
         "filesFREE": [],
         "filesPRO":[
-            "PRO/**/*.php"
+            "{PRO/**/*.php}"
         ]
     },
 
@@ -56,10 +56,10 @@
         "browserSyncNotify": false
     },
     "ftp": {
-        "host": "235234.w34.wedos.net",
-        "user": "w235234",
-        "password": "viG81IwWC964CMpfiAw!",
+        "host": "{235234.w34.wedos.net}",
+        "user": "{w235234}",
+        "password": "{viG81IwWC964CMpfiAw!}",
         "parallel": 10,
-        "baseDir": "www/domains/islander.live/wp-content/plugins/dp-intro-tours"
+        "baseDir": "{www/domains/islander.live/wp-content/plugins/dp-intro-tours}"
     }
 }

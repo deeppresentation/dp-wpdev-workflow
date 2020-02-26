@@ -24,8 +24,8 @@ module.exports = {
 	slug: dpwf.id, // Plugin or Theme slug, basically the directory name under `wp-content/<themes|plugins>`
 	// Used to generate banners on top of compiled stuff
 	bannerConfig: {
-		name: dpwf.label,
-		author: dpwf.autor,
+		name: dpwf.title,
+		author: dpwf.author,
 		license: dpwf.license[`type${dpwf.buildType}`],
 		link: dpwf.license[`link${dpwf.buildType}`],
 		version: pkg.version,
@@ -100,6 +100,11 @@ module.exports = {
             },
         }
     ],
+    // Hook into babeloverride so that we can add react-hot-loader plugin
+	jsBabelOverride: defaults => ({
+		...defaults,
+		plugins: dpwf.hasReact ? ['react-hot-loader/babel'] : [],
+	}),
 	// Output path relative to the context directory
 	// We need relative path here, else, we can not map to publicPath
 	outputPath: dpwf.assets.dir,
