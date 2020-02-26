@@ -36,7 +36,7 @@ module.exports = {
 	// Files we need to compile, and where to put
 	files: [
         {
-            name: 'scriptsAndStyles',
+            name: 'scriptsandstyles',
             entry: dpWfHelper.getEntryAssetFiles(),
             // Extra webpack config to be dynamically created
             webpackConfig: (config, merge, appDir, isDev) => {

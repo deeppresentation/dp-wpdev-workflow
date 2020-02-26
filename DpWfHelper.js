@@ -39,5 +39,5 @@ module.exports.getEntryAssetFiles = function () {
 }
 
 module.exports.writeBuildTypePhp = function () {
-    fs.outputFileSync('./dp-wpdev-workflow/dp-build-type.php', `<?php define('BUILD_TYPE', '${dpwf.buildType}'); ?>`);
+    fs.outputFileSync('./dp-build-type.php', `<?php define('BUILD_TYPE', '${dpwf.buildType}'); ?>`);
 }
