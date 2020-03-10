@@ -1,10 +1,9 @@
 const dpwf = require('../dp-wpdev-workflow.json');
+const pkgjs = require('../package.json');
 const fs = require('fs-extra');
 const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
 
-
-term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}\n`);
 
 module.exports.getPackageFiles = function () {
 
@@ -51,7 +50,7 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
         $keyUpperCase = key.toUpperCase();
         if (dpwf.product[key].link) res += `define('${definePrefix}_PRODUCT_LINK_${$keyUpperCase}', "${dpwf.product[key].link}");\n`;
         if (dpwf.product[key].keyBuyLink) res += `define('${definePrefix}_KEY_LINK_${$keyUpperCase}', "${dpwf.product[key].keyBuyLink}");\n`;
-        
+
         if (dpwf.product[key].title) res += `define('${definePrefix}_NAME_${$keyUpperCase}', "${dpwf.product[key].title}");\n`;
         else if (dpwf.title) res += `define('${definePrefix}_NAME_${$keyUpperCase}', "${dpwf.title}");\n`;
     });
@@ -97,11 +96,11 @@ module.exports.incrementVersion = function (currentVersion, versionTypeToIncreme
 module.exports.setSubItemPerBuild = function (itemName, subItemName, val) {
     var item = dpwf[itemName];
     if (item) {
-       
+
         if (item[dpwf.buildType]) {
             item[dpwf.buildType][subItemName] = val;
             return true;
-        }        
+        }
     }
     return false;
 }
@@ -128,10 +127,32 @@ module.exports.getTitle = function () {
 }
 
 
+function updatePackageJson(id, version, buildType) {
+    // save package json version
+
+    var packageJsonShouldBeWritten = false;
+    if (pkgjs.name !== id) {
+        packageJsonShouldBeWritten = true;
+        pkgjs.name = id;
+    }
+
+    if (buildType === 'PRO' && version != pkgjs.version)
+    {
+        pkgjs.version = version;
+        packageJsonShouldBeWritten = true;
+    }
+
+    if (packageJsonShouldBeWritten)
+    {
+        fs.outputJSONSync('./package.json', pkgjs, { spaces: 4 });
+    }
+
+}
+
 
 function generateWpPluginInfoHeadrData(version) {
     var pluginName = module.exports.getTitle();
-    
+
 
     var res = `/*
 *
@@ -154,7 +175,7 @@ function generateWpPluginInfoHeadrData(version) {
     return res;
 }
 
-module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFile, versionTypeToIncrement = 'build') {
+module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFile, versionTypeToIncrement = 'build', buildTypeModified = false) {
     if (srcPhpIndexFile && dstPhpIndexFile) {
         var data = fs.readFileSync(srcPhpIndexFile);
         if (data) {
@@ -187,13 +208,16 @@ module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFi
                             var newDataStr = dataStr.replace(oldInfoHeader, newInfoHeader);
                             if (newDataStr) {
                                 fs.outputFileSync(dstPhpIndexFile, newDataStr);
-                                if (newVersion !== oldVersion)
-                                {
+                                var wasWorkflowCfgSaved = false;
+                                if (newVersion !== oldVersion) {
                                     // save adjusted version to dp-wp-dev-workflow.js json 
-                                    if (module.exports.setSubItemPerBuild('product', 'version',newVersion) )
-                                    {
-                                        fs.outputJSONSync('./dp-wpdev-workflow.json', dpwf, {spaces: 4});  
+                                    if (module.exports.setSubItemPerBuild('product', 'version', newVersion)) {
+                                        fs.outputJSONSync('./dp-wpdev-workflow.json', dpwf, { spaces: 4 });
+                                        wasWorkflowCfgSaved = true;
                                     }
+                                }
+                                if (!wasWorkflowCfgSaved && buildTypeModified) {
+                                    fs.outputJSONSync('./dp-wpdev-workflow.json', dpwf, { spaces: 4 });
                                 }
                                 return newVersion;
                             }
@@ -206,4 +230,37 @@ module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFi
     }
     return null;
 }
+
+module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIncrement = 'build', buildTypeModifier = null) {
+
+
+    var indexPhpFile = dpwf.indexPhpFile;
+    if (!indexPhpFile) indexPhpFile = './index.php';
+
+    var buildTypeModified = false;
+    if (buildTypeModifier) {
+        buildTypeModified = buildTypeModifier !== dpwf.buildType;
+        dpwf.buildType = buildTypeModifier;
+    }
+
+    term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}\n`);
+
+    const oldVersion = module.exports.getSubItemPerBuild('info', 'version');
+    const newVersion = module.exports.printWpPluginInfoHeadr(indexPhpFile, indexPhpFile, versionTypeToIncrement, buildTypeModified);
+
+    if (newVersion) {
+
+        updatePackageJson(dpwf.id, newVersion, dpwf.buildType);
+        term.green(`√ Wordpress header in ${indexPhpFile} was adjusted to current build configuration (${dpwf.buildType}). \n`);
+        if (newVersion !== oldVersion) {
+            term.green(`√ Version was incremented from ${oldVersion} to ${newVersion} \n`);
+        }
+    }
+    else {
+        term.red(`√ Adjusting of wordpress header in ${indexPhpFile} FAILED!! (Build configuration: ${dpwf.buildType}). \n`);
+    }
+
+
+}
+
 

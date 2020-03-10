@@ -1,6 +1,6 @@
 {
-  "name": "dp-intro-tours",
-  "version": "0.1.0",
+  "name": "project-slug",
+  "version": "1.0.0",
   "private": true,
   "devDependencies": {
     "@wpackio/scripts": "^4.3.0",
@@ -19,9 +19,9 @@
   },
   "scripts": {
     "bootstrap": "wpackio-scripts bootstrap",
-    "build": "wpackio-scripts build",
-    "start": "wpackio-scripts start",
-    "pack": "node dp-wpdev-workflow/wpackio-pack-fixer",
+    "build": "node dp-wpdev-workflow/dp-build",
+    "start": "node dp-wpdev-workflow/dp-start",
+    "pack": "node dp-wpdev-workflow/dp-pack",
     "deploy2git": "gulp deploy2git",
     "deploy2ftp": "gulp deploy2ftp",
     "clearftp": "gulp clearftp",
@@ -30,8 +30,6 @@
   },
   "dependencies": {
     "@wpackio/entrypoint": "^4.3.0",
-    "intro.js": "^2.9.3",
-    "url-parse": "^1.4.7",
-    "waypoints": "^4.0.1"
+    "url-parse": "^1.4.7"
   }
 }
