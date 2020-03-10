@@ -3,16 +3,36 @@
     "title": "{Human read name}",
     "type": "{plugin-or-theme}",
     "author": "Tomas Groulik <tomas.groulik@gmail.com>",
+    "autorLink": "https://deeppresentation.com",
     "buildType": "{PRO-or-FREE}",
     "hasReact": false,
     "hasSass": true,
-    "license":{
-        "type": "GPL-2.0+",
-        "typePRO": "PRO LICENSE TO BE DEFINED",
-        "link": "http://www.gnu.org/licenses/gpl-2.0.txt",
-        "linkPRO": "PRO LICENSE LINK TO BE DEFINED",
-        "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpres.org plugin repositary",
-        "copyrightTextPRO": "PRO CREDENTIALS TO BE DEFINED"
+    "indexPhpFile": "./index.php",
+    "product": {
+        "FREE": {
+            "version": "1.0.0",
+            "link": "https://wordpress.org/plugins/{project-slug}",
+            "desc": "Description of FREE version"
+        },
+        "PRO": {
+            "version": "1.0.0",
+            "title": "{Human read name} PRO",
+            "link": "https://deeppresentation.com/web/plugins/{project-slug}",
+            "desc": "Description of PRO version",
+            "keyBuyLink": "https://deeppresentation.com/shop/"
+        }
+    },
+    "license": {
+        "FREE": {
+            "type": "GPL-2.0+",
+            "link": "http://www.gnu.org/licenses/gpl-2.0.txt",
+            "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpres.org plugin repositary"
+        },
+        "PRO": {
+            "type": "PRO LICENSE TO BE DEFINED",
+            "link": "PRO LICENSE LINK TO BE DEFINED",
+            "copyrightText": "PRO CREDENTIALS TO BE DEFINED"
+        }
     },
     "assets":{
         "dir": "dist",

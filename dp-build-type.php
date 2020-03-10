@@ -1,1 +1,0 @@
-<?php define('BUILD_TYPE', 'PRO'); ?>

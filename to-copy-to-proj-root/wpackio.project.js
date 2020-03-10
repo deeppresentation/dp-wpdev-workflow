@@ -1,4 +1,3 @@
-const pkg = require('./package.json');
 const dpwf = require('./dp-wpdev-workflow.json');
 const camelCase = require('camelcase');
 const dpWfHelper = require('./dp-wpdev-workflow/DpWfHelper');
@@ -24,12 +23,12 @@ module.exports = {
 	slug: dpwf.id, // Plugin or Theme slug, basically the directory name under `wp-content/<themes|plugins>`
 	// Used to generate banners on top of compiled stuff
 	bannerConfig: {
-		name: dpwf.title,
+        name: dpWfHelper.getTitle(),
 		author: dpwf.author,
-		license: dpwf.license[`type${dpwf.buildType}`],
-		link: dpwf.license[`link${dpwf.buildType}`],
-		version: pkg.version,
-        copyrightText: dpwf.license[`copyrightText${dpwf.buildType}`],
+		license: dpWfHelper.getSubItemPerBuild('license', 'type'),
+		link: dpWfHelper.getSubItemPerBuild('license', 'link'),
+		version: dpWfHelper.getSubItemPerBuild('product', 'version'),
+        copyrightText: dpWfHelper.getSubItemPerBuild('license', 'copyrightText'),
 		credit: true,
     },
 
