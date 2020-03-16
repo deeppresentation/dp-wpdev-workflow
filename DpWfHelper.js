@@ -245,7 +245,7 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
 
     term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}\n`);
 
-    const oldVersion = module.exports.getSubItemPerBuild('info', 'version');
+    const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
     const newVersion = module.exports.printWpPluginInfoHeadr(indexPhpFile, indexPhpFile, versionTypeToIncrement, buildTypeModified);
 
     if (newVersion) {
@@ -254,6 +254,7 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
         term.green(`√ Wordpress header in ${indexPhpFile} was adjusted to current build configuration (${dpwf.buildType}). \n`);
         if (newVersion !== oldVersion) {
             term.green(`√ Version was incremented from ${oldVersion} to ${newVersion} \n`);
+            
         }
     }
     else {
