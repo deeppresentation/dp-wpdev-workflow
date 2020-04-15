@@ -78,10 +78,17 @@ module.exports.incrementVersion = function (currentVersion, versionTypeToIncreme
                     case 'build': build++; break;
                     case 'min':
                     case 'minor':
-                    case 'm': minor++; break;
+                    case 'm': 
+                        minor++; 
+                        build = 0;  
+                        break;
                     case 'maj':
                     case 'major':
-                    case 'M': major++; break;
+                    case 'M': 
+                        major++; 
+                        minor = 0;
+                        build = 0;
+                        break;
                     default: return res;
 
                 }
@@ -125,6 +132,16 @@ module.exports.getTitle = function () {
     if (product.title) title = product.title;
     return title;
 }
+
+module.exports.actualizeReadmePerBuildTypeBeforePack = function () {
+    const buildSpecReadMeNamePath = `./readme-${dpwf.buildType}.txt`;
+    if (fs.existsSync(buildSpecReadMeNamePath))
+    {
+        fs.copyFileSync(buildSpecReadMeNamePath, './readme.txt');
+        term.green(`√ Readme file was actualized by data from  ${buildSpecReadMeNamePath}. \n`);
+    }    
+}
+
 
 
 function updatePackageJson(id, version, buildType) {
