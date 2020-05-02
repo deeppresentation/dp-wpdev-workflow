@@ -39,7 +39,7 @@ module.exports.getEntryAssetFiles = function () {
 }
 
 module.exports.writeBuildTypePhp = function () {
-    const definePrefix = replaceString(dpwf.title, ' ', '_').toUpperCase();
+    const definePrefix = replaceString(dpwf.id, '-', '_').toUpperCase();
 
     var res = `<?php 
 define('BUILD_TYPE', '${dpwf.buildType}');
@@ -50,6 +50,7 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
         $keyUpperCase = key.toUpperCase();
         if (dpwf.product[key].link) res += `define('${definePrefix}_PRODUCT_LINK_${$keyUpperCase}', "${dpwf.product[key].link}");\n`;
         if (dpwf.product[key].keyBuyLink) res += `define('${definePrefix}_KEY_LINK_${$keyUpperCase}', "${dpwf.product[key].keyBuyLink}");\n`;
+        if (dpwf.product[key].askForRatingLink) res += `define('${definePrefix}_ASK_FOR_RATING_LINK_${$keyUpperCase}', "${dpwf.product[key].askForRatingLink}");\n`;
 
         if (dpwf.product[key].title) res += `define('${definePrefix}_NAME_${$keyUpperCase}', "${dpwf.product[key].title}");\n`;
         else if (dpwf.title) res += `define('${definePrefix}_NAME_${$keyUpperCase}', "${dpwf.title}");\n`;
