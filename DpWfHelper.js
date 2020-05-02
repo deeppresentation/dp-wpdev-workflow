@@ -274,6 +274,10 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
             term.green(`√ Version was incremented from ${oldVersion} to ${newVersion} \n`);
             
         }
+        else
+        {
+            term.green(`√ Version wast kept on ${oldVersion} \n`);
+        }
     }
     else {
         term.red(`√ Adjusting of wordpress header in ${indexPhpFile} FAILED!! (Build configuration: ${dpwf.buildType}). \n`);
