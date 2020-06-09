@@ -23,6 +23,7 @@ class DpWf {
 
         gulp.task('PROCESS:DIST_2_GIT', gulp.series(this.processDistDeployGit.bind(this)));
         gulp.task('PROCESS:DIST_2_FTP', gulp.series(this.processDistDeployFtp.bind(this), this.notifyDist2Ftp.bind(this)));
+        gulp.task('PROCESS:DIST_PACK_2_FTP', gulp.series(this.processDistDeployPackFtp.bind(this), this.notifyDistPack2Ftp.bind(this)));
 
         gulp.task('UPDATE_G_MODULES', this.updateComposerGModules.bind(this));
         gulp.task('PUSH_G_MODULES', this.pushComposerGModules.bind(this));
@@ -45,6 +46,17 @@ class DpWf {
         if (done) done();
     }
 
+    processDistDeployPackFtp(done){
+        if (this.config.ftp) {
+            var conn = ftp.create(this.config.ftp);
+            return gulp.src(path.joinSafe(this.config.package.dir, this.config.id + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
+                .pipe(conn.newerOrDifferentSize(this.config.ftp.baseDirZip)) // only upload newer files
+                .pipe(conn.dest(this.config.ftp.baseDirZip));
+        }
+        else if (done) done();
+    }
+    
+
     processDistDeployFtp(done) {
 
         if (this.config.ftp) {
@@ -53,13 +65,22 @@ class DpWf {
                 .pipe(conn.newerOrDifferentSize(this.config.ftp.baseDir)) // only upload newer files
                 .pipe(conn.dest(this.config.ftp.baseDir));
         }
-        if (done) done();
+        else if (done) done();
     }
 
     notifyDist2Ftp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
             message: 'Distribution of ' + this.config.id + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDir),
+            icon: path.joinSafe(__dirname, dpLogo)
+        });
+        if (done) done();
+    }
+
+    notifyDistPack2Ftp(done) {
+        notifier.notify({
+            title: '✅  DISTRIBUTION PACKAGE WAS DEPLOYED TO FTP',
+            message: 'Distribution of ' + this.config.id + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDirZip),
             icon: path.joinSafe(__dirname, dpLogo)
         });
         if (done) done();

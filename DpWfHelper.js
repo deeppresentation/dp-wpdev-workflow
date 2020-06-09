@@ -27,15 +27,111 @@ module.exports.getPackageFilesAllBuilds = function () {
     return files;
 }
 
-module.exports.getEntryAssetFiles = function () {
-
-    if (dpwf.package[`files${dpwf.buildType}`]) {
-        return {
-            ...dpwf.assets.files,
-            ...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
-        }
+function adjustAsDefaultAsset(name, entry, webpackConfig = null){
+    return {
+        name: name,
+        entry: entry,
+        webpackConfig: webpackConfig ? webpackConfig : module.exports.getCustomizeWebPackCfgFce,
     }
-    else return dpwf.assets.files;
+}
+
+module.exports.getEntryAssetFiles = function () {
+    const res = [];
+    if (dpwf.assets.bundles){
+        Object.keys(dpwf.assets.bundles).forEach((bundleKey) => {
+            if (dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`]) {
+                res.push(adjustAsDefaultAsset(
+                    bundleKey, {
+                        ...dpwf.assets.bundles[bundleKey].files,
+                        ...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
+                    }));  
+            }
+            else res.push(adjustAsDefaultAsset(bundleKey,dpwf.assets.bundles[bundleKey].files));
+        });
+    }
+    else{
+        if (dpwf.assets[`files${dpwf.buildType}`]) {
+            res.push(adjustAsDefaultAsset(
+                'scriptsandstyles', {
+                    ...dpwf.assets.files,
+                    ...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
+                }));  
+        }
+        else res.push(adjustAsDefaultAsset('scriptsandstyles',dpwf.assets.files));
+    }
+    return res;
+}
+
+
+module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
+    const {
+        getFileLoaderOptions,
+        getBabelPresets,
+        getDefaultBabelPresetOptions,
+        issuerForJsTsFiles,
+        issuerForNonJsTsFiles,
+        babelLoader,
+        fileLoader,
+        // eslint-disable-next-line import/no-extraneous-dependencies
+    } = require('@wpackio/scripts');
+    const customRules = {
+        module: {
+            rules: [
+                // Config for SVGR in javascript/typescript files
+                {
+                    test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                    issuer: issuerForJsTsFiles,
+                    use: [
+                        {
+                            loader: babelLoader,
+                            options: {
+                                presets: getBabelPresets(
+                                    getDefaultBabelPresetOptions(
+                                        true,
+                                        isDev
+                                    ),
+                                    undefined
+                                ),
+                            },
+                        },
+                        {
+                            loader: '@svgr/webpack',
+                            options: { 
+                                babel: false
+                            },
+                        },
+                        {
+                            loader: fileLoader,
+                            options: getFileLoaderOptions(
+                                appDir,
+                                isDev,
+                                false
+                            ),
+                        },
+                    ],
+                },
+                // For everything else, we use file-loader only
+                {
+                    test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                    issuer: issuerForNonJsTsFiles,
+                    use: [
+                        {
+                            loader: fileLoader,
+                            options: getFileLoaderOptions(
+                                appDir,
+                                isDev,
+                                true
+                            ),
+                        },
+                    ],
+                },
+            ],
+        },
+    };
+
+    // merge and return
+    return merge(config, customRules);
+    
 }
 
 module.exports.writeBuildTypePhp = function () {

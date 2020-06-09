@@ -33,72 +33,7 @@ module.exports = {
     },
 
 	// Files we need to compile, and where to put
-	files: [
-        {
-            name: 'scriptsandstyles',
-            entry: dpWfHelper.getEntryAssetFiles(),
-            // Extra webpack config to be dynamically created
-            webpackConfig: (config, merge, appDir, isDev) => {
-                const customRules = {
-                    module: {
-                        rules: [
-                            // Config for SVGR in javascript/typescript files
-                            {
-                                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                                issuer: issuerForJsTsFiles,
-                                use: [
-                                    {
-                                        loader: babelLoader,
-                                        options: {
-                                            presets: getBabelPresets(
-                                                getDefaultBabelPresetOptions(
-                                                    true,
-                                                    isDev
-                                                ),
-                                                undefined
-                                            ),
-                                        },
-                                    },
-                                    {
-                                        loader: '@svgr/webpack',
-                                        options: { 
-                                            babel: false
-                                        },
-                                    },
-                                    {
-                                        loader: fileLoader,
-                                        options: getFileLoaderOptions(
-                                            appDir,
-                                            isDev,
-                                            false
-                                        ),
-                                    },
-                                ],
-                            },
-                            // For everything else, we use file-loader only
-                            {
-                                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                                issuer: issuerForNonJsTsFiles,
-                                use: [
-                                    {
-                                        loader: fileLoader,
-                                        options: getFileLoaderOptions(
-                                            appDir,
-                                            isDev,
-                                            true
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                };
-
-                // merge and return
-                return merge(config, customRules);
-            },
-        }
-    ],
+	files: dpWfHelper.getEntryAssetFiles(),
     // Hook into babeloverride so that we can add react-hot-loader plugin
 	jsBabelOverride: defaults => ({
 		...defaults,
