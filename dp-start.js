@@ -9,6 +9,7 @@ if (buildTypeModifier)
     if (dpwf.product && Object.keys(dpwf.product).findIndex(val => val == buildTypeModifier) >= 0)
     {
         dpwfHelper.incrementVersionAndAdjustWpInfoHeader(null, buildTypeModifier);
+        dpwfHelper.writeBuildTypePhp(true);// add PRO or FREE define to dp-build-type.php
         npmRunScript('wpackio-scripts start');
     }
     else
@@ -19,6 +20,7 @@ if (buildTypeModifier)
 else
 {
     dpwfHelper.incrementVersionAndAdjustWpInfoHeader(null, null);
+    dpwfHelper.writeBuildTypePhp(true);// add PRO or FREE define to dp-build-type.php
     npmRunScript('wpackio-scripts start'); 
 }
 
