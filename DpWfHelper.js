@@ -138,7 +138,7 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
     const definePrefix = replaceString(dpwf.id, '-', '_').toUpperCase();
 
     var res = `<?php 
-define('BUILD_TYPE', '${dpwf.buildType}');
+define('DP_BUILD_TYPE', '${dpwf.buildType}');
 define('DP_DEBUG_EN', ${debugEn});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');

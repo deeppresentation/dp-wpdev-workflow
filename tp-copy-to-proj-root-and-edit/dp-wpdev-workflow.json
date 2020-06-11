@@ -10,15 +10,16 @@
     "indexPhpFile": "./index.php",
     "product": {
         "FREE": {
-            "version": "1.0.0",
+            "version": "0.0.0",
             "link": "https://wordpress.org/plugins/{project-slug}",
-            "desc": "Description of FREE version"
+            "desc": "{Description of FREE version}",
+            "askForRatingLink": "https://wordpress.org/support/plugin/{project-slug}/reviews/"
         },
         "PRO": {
-            "version": "1.0.0",
-            "title": "{Human read name} PRO",
+            "version": "0.0.0",
+            "title": "{Human read name } PRO",
             "link": "https://deeppresentation.com/web/plugins/{project-slug}",
-            "desc": "Description of PRO version",
+            "desc": "{Description of PRO version}",
             "keyBuyLink": "https://deeppresentation.com/shop/"
         }
     },
@@ -29,27 +30,42 @@
             "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpres.org plugin repositary"
         },
         "PRO": {
-            "type": "PRO LICENSE TO BE DEFINED",
-            "link": "PRO LICENSE LINK TO BE DEFINED",
-            "copyrightText": "PRO CREDENTIALS TO BE DEFINED"
+            "type": "GPL",
+            "link": "http://www.opensource.org/licenses/gpl-license.php",
+            "copyrightText": "Copyright (c) 2020 DeepPresentation <Tomáš Groulík>. All rights reserved."
         }
     },
     "assets":{
         "dir": "dist",
-        "files":{
-            "scriptId1": "{./public/assets/js/script-FREE&PRO.js}",
-            "style1": "{./public/assets/js/script-FREE&PRO>.js}",
-            "scriptId3": "..."
-        },
-        "filesFREE":{
-            "scriptId2": "{./public/assets/js/script-FREE>.js}",
-            "style2": "{./public/assets/css/style>.css}",
-            "style3": "..."
-        },
-        "filesPRO":{
-            "scriptId2": "{./public/assets/js/script-PRO>.js}",
-            "style2": "{./public/assets/css/style-PRO>.css}",
-            "style3": "..."
+        "bundles":{
+            "bundle1":{
+                "files":{
+                    "scriptId1": "{./public/assets/js/script-FREE&PRO.js}",
+                    "style1": "{./public/assets/js/script-FREE&PRO>.js}",
+                    "scriptId3": "..."
+                },
+                "filesFREE":{
+                    "scriptId2": "{./public/assets/js/script-FREE>.js}",
+                    "style2": "{./public/assets/css/style>.css}",
+                    "style3": "..."
+                },
+                "filesPRO":{
+                    "scriptId2": "{./public/assets/js/script-PRO>.js}",
+                    "style2": "{./public/assets/css/style-PRO>.css}",
+                    "style3": "..."
+                }
+            },
+            "bundle2": {
+                "files": {
+                    "dpIntroBuilderStyle": "./public/assets/css/dpintro-builder.scss"
+                },
+                "filesFREE": {
+                    "dpIntroBuilder": "./public/assets/js/dp-intro-builder.js"
+                },
+                "filesPRO": {
+                    "dpIntroBuilder": "./public/assets/js/dp-intro-builder-PRO.js"
+                }
+            }
         }
     },
     "watch": [
@@ -72,14 +88,15 @@
 
     "server": {
         "proxy": "localhost/",
-        "browserAutoOpen": true,
+        "browserAutoOpen": false,
         "browserSyncNotify": false
     },
     "ftp": {
-        "host": "{235234.w34.wedos.net}",
-        "user": "{w235234}",
-        "password": "{viG81IwWC964CMpfiAw!}",
+        "host": "239725.w25.wedos.net",
+        "user": "w239725",
+        "password": "8RrWdxEQJv#AoV9YGpZ7",
         "parallel": 10,
-        "baseDir": "{www/domains/islander.live/wp-content/plugins/dp-intro-tours}"
+        "baseDir": "{www/domains/islander.live/wp-content/plugins/dp-intro-tours}",
+        "baseDirZip": "www/domains/deeppresentation.com/wp-update-server/packages"
     }
 }

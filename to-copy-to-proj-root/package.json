@@ -11,6 +11,7 @@
     "node-notifier": "^5.4.3",
     "node-sass": "^4.13.1",
     "npm-run-script": "0.0.4",
+    "replace-string": "^3.1.0",
     "simple-git": "^1.126.0",
     "terminal-kit": "^1.33.15",
     "upath": "^1.2.0",
