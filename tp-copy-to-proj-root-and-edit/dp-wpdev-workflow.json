@@ -8,6 +8,7 @@
     "hasReact": false,
     "hasSass": true,
     "indexPhpFile": "./index.php",
+    "wordpressOrgSvnBaseDir": "d:/Projects/SW-dev/Web/Dev-src/_plugins/_releases/wordpress-repo/",
     "product": {
         "FREE": {
             "version": "0.0.0",
