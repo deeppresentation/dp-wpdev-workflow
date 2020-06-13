@@ -29,7 +29,11 @@
         "clearftp": "gulp clearftp",
         "updatedpm": "gulp updatedpm",
         "pushdpm": "gulp pushdpm",
-        "deploy2wporg": "gulp deploy2wporg" 
+        "deploy2wporg": "gulp deploy2wporg",
+        "pushself": "gulp pushself", 
+        "pullself": "gulp pullself",
+        "pulldp": "gulp pulldp", 
+        "pushdp": "gulp pushdp"  
     },
     "dependencies": {
         "@wpackio/entrypoint": "^4.3.0",
