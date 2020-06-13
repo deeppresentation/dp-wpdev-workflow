@@ -30,6 +30,7 @@ class DpWf {
         gulp.task('UPDATE_DP_MODULES', this.updateComposerDPModules.bind(this));
         gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
         gulp.task('PUSH_SELF', this.pushSelf.bind(this));
+        gulp.task('PULL_SELF', this.pullSelf.bind(this));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
 
         
@@ -157,6 +158,30 @@ class DpWf {
         this.pushGitModule( [path.joinSafe(dirBkp,'dp-wpdev-workflow')], 0, commitMessage, done);  
     }
 
+    pullSelf(done) {
+        var argv = require('yargs').argv;
+        var dirBkp = process.cwd();
+        this.pullGitModule( [path.joinSafe(dirBkp,'dp-wpdev-workflow')], 0, done);  
+    }
+
+
+
+    pullGitModule( modules, idx, done){
+
+        if (idx < modules.length)
+        {
+            var moduleDir = modules[idx];
+            var git = simpleGit(moduleDir);
+            git.pull('origin', 'master')
+                .then(() => {
+                    term.green('Module ' + moduleDir +' was sucessfully pulled from master.\n');
+                    idx++;
+                    this.pullGitModule( modules, idx, done);
+                })
+        }
+        else if (done) done();
+    }
+
     pushGitModule( modules, idx, commitMessage, done){
 
         if (idx < modules.length)
@@ -167,35 +192,12 @@ class DpWf {
                 .then(() => git.commit(commitMessage))
                 .then(() => git.push('origin', 'master'))
                 .then(() => {
-                    term.green('DP module ' + moduleDir +' was sucessfully commited and pushed into master.\n');
+                    term.green('Module ' + moduleDir +' was sucessfully commited and pushed into master.\n');
                     idx++;
                     this.pushGitModule( modules, idx, commitMessage, done);
                 })
         }
         else if (done) done();
-    }
-
-    pullDPModules( modules, idx, commitMessage, done)
-    {
-        if (idx < modules.length)
-        {
-            var moduleDir = modules[idx];
-            composer('update deeppresentation/*'/*, {
-                "working-dir": path.join(greengRoot, "..", "..")
-            }*/);
-            var git = simpleGit(moduleDir);
-            git.add('--all')
-                .then(() => git.commit(commitMessage))
-                .then(() => git.push('origin', 'master'))
-                .then(() => {
-                    term.green('DP module ' + moduleDir +' was sucessfully commited and pushed into master.\n');
-                    idx++;
-                    this.pushGitModule( modules, idx, commitMessage, done);
-                })
-        }
-        else {
-            if (done) done();
-        }
     }
 
     clearWordpressOrgTrunk(done){
