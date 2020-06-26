@@ -5,6 +5,8 @@ const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
 
 
+
+
 module.exports.getPackageFiles = function () {
 
     if (dpwf.package[`files${dpwf.buildType}`]) {
@@ -34,6 +36,17 @@ function adjustAsDefaultAsset(name, entry, webpackConfig = null){
         webpackConfig: webpackConfig ? webpackConfig : module.exports.getCustomizeWebPackCfgFce,
     }
 }
+
+module.exports.setActualScriptType = function (scriptType) {
+    fs.outputJSONSync('./dp-wpdev-workflow/actual-script-type.json', { scriptType: scriptType }, { spaces: 4 });
+}
+
+module.exports.getActualScriptType = function (scriptType) {
+    const actualScriptType = require('./actual-script-type.json');
+    return actualScriptType ? actualScriptType.scriptType : null;
+}
+
+
 
 module.exports.getEntryAssetFiles = function () {
     const res = [];
@@ -229,6 +242,12 @@ module.exports.getTitle = function () {
     }
     if (product.title) title = product.title;
     return title;
+}
+
+module.exports.getPackageId = function () {
+    if (module.exports.getActualScriptType() === 'start') return dpwf.id;
+    var packageId = module.exports.getSubItemPerBuild('product', 'packageId');
+    return packageId ? packageId : dpwf.id;
 }
 
 module.exports.actualizeReadmePerBuildTypeBeforePack = function () {

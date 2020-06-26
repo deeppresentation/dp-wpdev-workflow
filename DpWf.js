@@ -56,7 +56,7 @@ class DpWf {
     processDistDeployPackFtp(done){
         if (this.config.ftp) {
             var conn = ftp.create(this.config.ftp);
-            return gulp.src(path.joinSafe(this.config.package.dir, this.config.id + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
+            return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId() + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
                 .pipe(conn.newerOrDifferentSize(this.config.ftp.baseDirZip)) // only upload newer files
                 .pipe(conn.dest(this.config.ftp.baseDirZip));
         }
@@ -68,7 +68,7 @@ class DpWf {
 
         if (this.config.ftp) {
             var conn = ftp.create(this.config.ftp);
-            return gulp.src(path.joinSafe(this.config.package.dir, this.config.id, '**'), { base: path.joinSafe('.', this.config.package.dir, this.config.id), buffer: false })
+            return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId(), '**'), { base: path.joinSafe('.', this.config.package.dir, dpWfHelper.getPackageId()), buffer: false })
                 .pipe(conn.newerOrDifferentSize(this.config.ftp.baseDir)) // only upload newer files
                 .pipe(conn.dest(this.config.ftp.baseDir));
         }
@@ -78,7 +78,7 @@ class DpWf {
     notifyDist2Ftp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
-            message: 'Distribution of ' + this.config.id + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDir),
+            message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDir),
             icon: path.joinSafe(__dirname, dpLogo)
         });
         if (done) done();
@@ -87,7 +87,7 @@ class DpWf {
     notifyDistPack2Ftp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION PACKAGE WAS DEPLOYED TO FTP',
-            message: 'Distribution of ' + this.config.id + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDirZip),
+            message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDirZip),
             icon: path.joinSafe(__dirname, dpLogo)
         });
         if (done) done();

@@ -25,7 +25,7 @@
         "pack": "node dp-wpdev-workflow/dp-pack",
         "deploy2git": "gulp deploy2git",
         "deploy2ftp": "gulp deploy2ftp",
-        "deployPack": "gulp deployPack",
+        "deploypack": "gulp deployPack",
         "clearftp": "gulp clearftp",
         "updatedpm": "gulp updatedpm",
         "pushdpm": "gulp pushdpm",

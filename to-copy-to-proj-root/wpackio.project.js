@@ -5,22 +5,11 @@ const dpWfHelper = require('./dp-wpdev-workflow/DpWfHelper');
 dpWfHelper.writeBuildTypePhp();// add PRO or FREE define to dp-build-type.php
 
 
-const {
-	getFileLoaderOptions,
-	getBabelPresets,
-	getDefaultBabelPresetOptions,
-	issuerForJsTsFiles,
-	issuerForNonJsTsFiles,
-	babelLoader,
-	fileLoader,
-	// eslint-disable-next-line import/no-extraneous-dependencies
-} = require('@wpackio/scripts');
-
 module.exports = {
 	// Project Identity
 	appName: camelCase(dpwf.id),
 	type: dpwf.type, // plugin or theme
-	slug: dpwf.id, // Plugin or Theme slug, basically the directory name under `wp-content/<themes|plugins>`
+	slug: dpWfHelper.getPackageId(), // Plugin or Theme slug, basically the directory name under `wp-content/<themes|plugins>`
 	// Used to generate banners on top of compiled stuff
 	bannerConfig: {
         name: dpWfHelper.getTitle(),

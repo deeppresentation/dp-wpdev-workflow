@@ -1,9 +1,13 @@
 const npmRunScript = require('npm-run-script');
 const dpwfHelper = require('./DpWfHelper');
 const dpwf = require('../dp-wpdev-workflow');
+const term = require( 'terminal-kit' ).terminal;
 
 var buildTypeModifier = null;
 if (process.argv[2]) buildTypeModifier = process.argv[2].toUpperCase();
+
+dpwfHelper.setActualScriptType('start');
+
 if (buildTypeModifier)
 {
     if (dpwf.product && Object.keys(dpwf.product).findIndex(val => val == buildTypeModifier) >= 0)
