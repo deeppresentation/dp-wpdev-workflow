@@ -1,7 +1,11 @@
 const npmRunScript = require('npm-run-script');
 const dpwfHelper = require('./DpWfHelper');
 
-var versionTypeToIncrement = 'build';
+var versionTypeToIncrement = 'n';
+var a = dpwfHelper.getEntryAssetFiles();
+var b = a;
+
+
 dpwfHelper.setActualScriptType('build');
 if (process.argv[2]) versionTypeToIncrement = process.argv[2];
 dpwfHelper.incrementVersionAndAdjustWpInfoHeader(versionTypeToIncrement);

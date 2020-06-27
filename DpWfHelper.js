@@ -30,6 +30,7 @@ module.exports.getPackageFilesAllBuilds = function () {
 }
 
 function adjustAsDefaultAsset(name, entry, webpackConfig = null){
+
     return {
         name: name,
         entry: entry,
@@ -87,8 +88,14 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
         fileLoader,
         // eslint-disable-next-line import/no-extraneous-dependencies
     } = require('@wpackio/scripts');
+    var disableSourceMaps = false;
+    if (!isDev){
+        disableSourceMaps = module.exports.getSubItemPerBuild('product', 'sourcMapsDisable', false);
+    }
     const customRules = {
+        devtool: disableSourceMaps ? false : 'source-map',
         module: {
+            
             rules: [
                 // Config for SVGR in javascript/typescript files
                 {
@@ -141,7 +148,6 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
             ],
         },
     };
-
     // merge and return
     return merge(config, customRules);
     

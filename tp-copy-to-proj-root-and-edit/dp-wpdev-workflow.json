@@ -17,6 +17,7 @@
             "askForRatingLink": "https://wordpress.org/support/plugin/{project-slug}/reviews/"
         },
         "PRO": {
+            "sourcMapsDisable": true,
             "packageId": "{project-slug}-pro",
             "version": "0.0.0",
             "title": "{Human read name } PRO",
