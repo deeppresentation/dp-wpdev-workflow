@@ -30,7 +30,7 @@ class DpWf {
         gulp.task('PROCESS:DIST_2_FTP', gulp.series(this.processDistDeployFtp.bind(this), this.notifyDist2Ftp.bind(this)));
         gulp.task('PROCESS:DIST_PACK_2_FTP', gulp.series(this.processDistDeployPackFtp.bind(this), this.notifyDistPack2Ftp.bind(this)));
 
-        gulp.task('UPDATE_DP_MODULES', this.updateComposerDPModules.bind(this));
+        gulp.task('UPDATE_DP_MODULES', gulp.series(this.updateComposerDPModules.bind(this), this.buildDPModules.bind(this)));
         gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
         gulp.task('PUSH_SELF', this.pushSelf.bind(this));
         gulp.task('PULL_SELF', this.pullSelf.bind(this));

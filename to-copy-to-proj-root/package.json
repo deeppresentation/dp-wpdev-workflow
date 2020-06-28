@@ -28,16 +28,16 @@
         "pack": "node dp-wpdev-workflow/dp-pack",
         "deploy2git": "gulp deploy2git",
         "deploy2ftp": "gulp deploy2ftp",
-        "deploypack": "gulp deployPack",
         "clearftp": "gulp clearftp",
         "updatedpm": "gulp updatedpm",
         "pushdpm": "gulp pushdpm",
-        "deploy2wporg": "gulp deploy2wporg",
+        "deploypro": "gulp deploypro",
+        "deployfree": "gulp deployfree",
         "pushself": "gulp pushself",
         "pullself": "gulp pullself",
         "pulldp": "gulp pulldp",
         "pushdp": "gulp pushdp",
-        "builddpm": "gulp builddpm"
+        "prefix": "gulp prefix"
     },
     "dependencies": {
         "@wpackio/entrypoint": "^4.3.0",
