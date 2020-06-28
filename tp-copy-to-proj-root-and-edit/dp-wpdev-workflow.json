@@ -9,6 +9,19 @@
     "hasSass": true,
     "indexPhpFile": "./index.php",
     "wordpressOrgSvnBaseDir": "d:/Projects/SW-dev/Web/Dev-src/_plugins/_releases/wordpress-repo/",
+    "phpScoper": {
+        "scopePrefix": "IntroTours",
+        "modules": [
+            "deeppresentation/php-std",
+            "deeppresentation/wordpress-std",
+            "wpackio/enqueue"
+        ],
+        "dependencies": {
+            "deeppresentation/wordpress-std": [
+                "deeppresentation/php-std"
+            ]
+        }
+    },
     "product": {
         "FREE": {
             "version": "0.0.0",

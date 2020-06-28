@@ -4,7 +4,7 @@ const gulp = require( 'gulp' );
 
 new DpWf(dpwfconfig);
 
-exports.default =  gulp.series('CLEAR:FTP');
+exports.default = gulp.series('BUILD_DP_MODULES');// gulp.series('CLEAR:FTP');
 exports.updatedpm = gulp.series('UPDATE_DP_MODULES');
 exports.pushdpm = gulp.series('PUSH_DP_MODULES');
 exports.pushself = gulp.series('PUSH_SELF');
@@ -16,4 +16,6 @@ exports.clearftp = gulp.series('CLEAR:FTP');
 exports.deploy2wporg =  gulp.series('DEPLOY_2_WP_ORG');
 
 exports.pulldp = gulp.series('PULL_SELF', 'UPDATE_DP_MODULES');
-exports.pushdp = gulp.series('PULL_SELF', 'PUSH_DP_MODULES');
+exports.pushdp = gulp.series('PUSH_SELF', 'PUSH_DP_MODULES');
+
+exports.builddpm = gulp.series('BUILD_DP_MODULES');

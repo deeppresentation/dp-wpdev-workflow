@@ -3,6 +3,7 @@ const pkgjs = require('../package.json');
 const fs = require('fs-extra');
 const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
+const path = require('upath');
 
 
 
@@ -74,6 +75,47 @@ module.exports.getEntryAssetFiles = function () {
         else res.push(adjustAsDefaultAsset('scriptsandstyles',dpwf.assets.files));
     }
     return res;
+}
+
+
+module.exports.getComposerAutoloadData = (moduleDir) => {
+    const composerJson = require( path.joinSafe(moduleDir, 'composer.json'));
+    if (composerJson)
+    {
+        const data =  composerJson.autoload['psr-4'];
+        var namespace = Object.keys(data)[0];
+        const path = data[namespace];
+        if (namespace.endsWith('\\'))
+        {
+            namespace = namespace.substr(0, namespace.length - 1);  
+        }
+        
+        return {
+            namespace: namespace,
+            path: path,
+            namespacePrefixed: dpwf.phpScoper.scopePrefix + namespace
+        }
+    }
+    return null;
+}
+
+module.exports.setComposerAutoloadData = (vendorPath, moduleName, oldNamespace, newNamespace, newPath) => {
+    const composerJsonPath = path.joinSafe(vendorPath, 'composer', 'installed.json');
+    const composerJson = require( composerJsonPath );
+    if (composerJson)
+    {
+        fs.outputJSONSync(composerJsonPath + '.bkp', composerJson, { spaces: 4 });
+        for (const moduleCfg of composerJson)
+        {
+            if (moduleCfg.name === moduleName){
+                if (!moduleCfg.autoload) moduleCfg.autoload = {};    
+                if (!moduleCfg.autoload['psr-4']) moduleCfg.autoload['psr-4'] = {};
+                if (moduleCfg.autoload['psr-4'][oldNamespace + '\\']) delete moduleCfg.autoload['psr-4'][oldNamespace + '\\'];
+                moduleCfg.autoload['psr-4'][newNamespace + '\\'] = newPath;
+            }
+        }
+        fs.outputJSONSync(composerJsonPath, composerJson, { spaces: 4 });
+    }
 }
 
 

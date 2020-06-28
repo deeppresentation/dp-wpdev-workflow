@@ -6,8 +6,11 @@
         "@wpackio/scripts": "^4.3.0",
         "fs-extra": "^8.1.0",
         "gulp": "^4.0.2",
+        "gulp-batch-replace": "0.0.0",
         "gulp-clean": "^0.4.0",
+        "gulp-clean-dest": "^0.2.0",
         "gulp-composer": "^0.4.5",
+        "merge-stream": "^2.0.0",
         "node-notifier": "^7.0.1",
         "node-sass": "^4.13.1",
         "npm-run-script": "0.0.4",
@@ -30,10 +33,11 @@
         "updatedpm": "gulp updatedpm",
         "pushdpm": "gulp pushdpm",
         "deploy2wporg": "gulp deploy2wporg",
-        "pushself": "gulp pushself", 
+        "pushself": "gulp pushself",
         "pullself": "gulp pullself",
-        "pulldp": "gulp pulldp", 
-        "pushdp": "gulp pushdp"  
+        "pulldp": "gulp pulldp",
+        "pushdp": "gulp pushdp",
+        "builddpm": "gulp builddpm"
     },
     "dependencies": {
         "@wpackio/entrypoint": "^4.3.0",

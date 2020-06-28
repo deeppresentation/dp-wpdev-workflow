@@ -7,10 +7,13 @@ const clean = require('gulp-clean');
 const ftp = require('vinyl-ftp');
 const composer = require('gulp-composer');
 const dpWfHelper = require('./DpWfHelper');
+const dpwfCfg = require('../dp-wpdev-workflow.json');
 const simpleGit = require('simple-git');
 const dpLogo = 'DP-logo.png';
 const term = require('terminal-kit').terminal;
-
+const cleanDest = require('gulp-clean-dest');
+const merge = require('merge-stream');
+const replace = require('gulp-batch-replace');
 
 class DpWf {
 
@@ -32,7 +35,8 @@ class DpWf {
         gulp.task('PUSH_SELF', this.pushSelf.bind(this));
         gulp.task('PULL_SELF', this.pullSelf.bind(this));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
-
+        gulp.task('BUILD_DP_MODULES', this.buildDPModules.bind(this));
+        
         
     }
 
@@ -131,6 +135,56 @@ class DpWf {
             .map(dirent => path.joinSafe(source, dirent.name))
     }
 
+    buildDPModules(done){
+        if (dpwfCfg.phpScoper && dpwfCfg.phpScoper.modules)
+        {   
+            var cdir = process.cwd();
+            const moduleReplacePreCfgs = {};
+            for (const module of dpwfCfg.phpScoper.modules)
+            {
+                const modulePath = path.joinSafe(cdir, 'vendor', module);
+                const composerData = dpWfHelper.getComposerAutoloadData(modulePath);
+                dpWfHelper.setComposerAutoloadData(path.joinSafe(cdir, 'vendor'), module, composerData.namespace, composerData.namespacePrefixed, 'build');
+                moduleReplacePreCfgs[module] = {
+                    replaceThis: [composerData.namespace, composerData.namespacePrefixed],
+                    src: path.joinSafe(modulePath, composerData.path, '**', '*'),
+                    dst: path.joinSafe(modulePath, 'build')
+                };
+            }
+
+            const moduleReplaceCfgs = [];
+            for (const moduleKey of Object.keys(moduleReplacePreCfgs))
+            {
+                const finalModCfg = {
+                    ...moduleReplacePreCfgs[moduleKey],
+                    replaceThis: [ moduleReplacePreCfgs[moduleKey].replaceThis ]
+                }
+                if (dpwfCfg.phpScoper.dependencies)
+                {
+                    const dependencies = dpwfCfg.phpScoper.dependencies[moduleKey];
+                    if (dependencies)
+                    {
+                        dependencies.forEach(dep => {
+                            if (moduleReplacePreCfgs[dep])
+                            {
+                                finalModCfg.replaceThis.push(moduleReplacePreCfgs[dep].replaceThis); 
+                            }      
+                        });  
+                    }
+                }
+                moduleReplaceCfgs.push(finalModCfg);
+            }
+
+            return merge(moduleReplaceCfgs.map((moduleCfg) => {
+                return gulp.src(moduleCfg.src)
+                    .pipe(replace(moduleCfg.replaceThis))
+                    .pipe(cleanDest(moduleCfg.dst))
+                    .pipe(gulp.dest(moduleCfg.dst))
+            }));
+        }
+        if (done) return done();
+    }
+
     pushComposerDPModules(done) {
         try
         {
@@ -189,8 +243,8 @@ class DpWf {
             var moduleDir = modules[idx];
             var git = simpleGit(moduleDir);
             git.add('--all')
-                .then(() => git.commit(commitMessage))
-                .then(() => git.push('origin', 'master'))
+                .then(() => git.commit(commitMessage), (reason) => term.green('Commit of module ' + moduleDir +' failed: '+ reason + '\n'))
+                .then(() => git.push('origin', 'master'), (reason) => term.green('Push of module ' + moduleDir +' failed: '+ reason + '\n'))
                 .then(() => {
                     term.green('Module ' + moduleDir +' was sucessfully commited and pushed into master.\n');
                     idx++;
