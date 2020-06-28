@@ -31,7 +31,7 @@ class DpWf {
         gulp.task('PROCESS:DIST_2_FTP', gulp.series(this.processDistDeployFtp.bind(this), this.notifyDist2Ftp.bind(this)));
         gulp.task('PROCESS:DIST_PACK_2_FTP', gulp.series(this.processDistDeployPackFtp.bind(this), this.notifyDistPack2Ftp.bind(this)));
         gulp.task('PUSH_SELF', gulp.series(this.updateDpWfFromProj.bind(this), this.pushSelf.bind(this)));
-        gulp.task('PULL_SELF', gulp.series(this.updateProjFromDpWf.bind(this), this.pullSelf.bind(this)));
+        gulp.task('PULL_SELF', gulp.series(/*this.pullSelf.bind(this), */ this.updateProjGulpfileFromDpWf.bind(this), this.updateProjPackageJsonFromDpWf.bind(this)));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
         gulp.task('BUILD_DP_MODULES', gulp.series(this.buildDPModules.bind(this), this.dumpAutoload.bind(this)));
         gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
@@ -238,7 +238,14 @@ class DpWf {
         this.pushGitModule( [path.joinSafe(dirBkp,'dp-wpdev-workflow')], 0, commitMessage, done);  
     }
 
-    updateProjFromDpWf(done){
+    updateProjGulpfileFromDpWf(done){
+        const cDir = process.cwd(); 
+        const copyToRootPath = path.joinSafe(cDir, 'dp-wpdev-workflow', 'to-copy-to-proj-root');
+        return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
+            .pipe(gulp.dest(cDir)); 
+    }
+
+    updateProjPackageJsonFromDpWf(done){
         const cDir = process.cwd(); 
         const packageJsonProj = require(path.joinSafe(cDir, 'package.json'));
         const copyToRootPath = path.joinSafe(cDir, 'dp-wpdev-workflow', 'to-copy-to-proj-root');
@@ -250,46 +257,49 @@ class DpWf {
             var shouldInstallNpm = false;
             if (JSON.stringify(packageJsonDpWf.devDependencies) !== JSON.stringify(packageJsonProj.devDependencies))
             {
-                term.yellow('Pulling SELF: Updating dev dependencies in project\'s package.json ...\n');
+                term.yellow('Pulling SELF: Dev dependencies in project\'s package.json are not up-to-date.\n');
                 packageJsonProj.devDependencies = packageJsonDpWf.devDependencies;
                 shouldWritePackageJson = true;
                 shouldInstallNpm = true;
             }
             if (JSON.stringify(packageJsonDpWf.scripts) !== JSON.stringify(packageJsonProj.scripts))
             {
-                term.yellow('Pulling SELF: Updating scripts in project\'s package.json ...\n');
+                term.yellow('Pulling SELF: Scripts in project\'s package.json are not up-to-date.\n');
                 packageJsonProj.scripts = packageJsonDpWf.scripts;
                 shouldWritePackageJson = true;
             }
+            shouldWritePackageJson = true;
+            shouldInstallNpm = true;
             if (shouldWritePackageJson)
             {
-                fs.outputJSONSync(path.joinSafe(cDir, 'package.json'), packageJsonProj, { spaces: 4 });
-            }
-            if (shouldInstallNpm)
-            {
-                npm.load( (err) => {
-                    term.yellow('Pulling SELF: Installing new dev dependencies ...\n');
-                    // install module ffi
-                    npm.commands.install([], (er, data) => {
-                        if (er) term.red(er + '\n');
-                        if (data) term(data + '\n');
-                        return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
-                            .pipe(gulp.dest(cDir)); 
-
-                    });
-                
-                    npm.on('log', (message) => {
-                        term(message + '\n');
-                    });
-                });   
-            }
-            else return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
-                .pipe(gulp.dest(cDir)); 
-        }
-        else return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
-            .pipe(gulp.dest(cDir)); 
+                if (shouldInstallNpm) term.yellow("Your package.json is not up-to-date. Should I update it and install missing dev dependencies? (Y/[n])\n");
+                else term.yellow("Your package.json is not up-to-date. Should I update it? (Y/[n])\n");
+                term.yesOrNo( { yes: [ 'y' , 'ENTER' ] , no: [ 'n' ] } , ( error , result ) => {
         
-     
+                    if ( result ) {
+                        term.brightGreen('Updating package.json ... \n');
+                        fs.outputJSONSync(path.joinSafe(cDir, 'package.json'), packageJsonProj, { spaces: 4 });
+
+                        if (shouldInstallNpm)
+                        {
+                            /*function printNpmLog(message){
+                                term(message + '\n');
+                            }*/
+                            npm.load( (err) => {
+                                term.brightGreen('Pulling SELF: Installing new dev dependencies ...\n');
+                                //npm.on('log', printNpmLog);
+                               /* npm.commands.install(['--quiet'], function (er, data){
+                                    //if (er) term.red(er + '\n');
+                                    //if (data) term(data + '\n');
+                                    //npm.off('log', printNpmLog);
+                                    if (done) done();
+                                });*/
+                            });   
+                        } else if (done) done();
+                    } else if (done) done();
+                });
+            } else if (done) done();
+        } else if (done) done();
     }
 
     pullSelf(done) {

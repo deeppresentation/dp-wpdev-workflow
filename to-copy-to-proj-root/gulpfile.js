@@ -5,7 +5,8 @@ const gulp = require( 'gulp' );
 new DpWf(dpwfconfig);
 
 
-exports.default = gulp.series('PUSH_SELF');
+
+exports.default = gulp.series('PULL_SELF');
 exports.pulldpm = gulp.series('UPDATE_DP_MODULES');
 exports.pushdpm = gulp.series('PUSH_DP_MODULES');
 exports.pushself = gulp.series('PUSH_SELF');
