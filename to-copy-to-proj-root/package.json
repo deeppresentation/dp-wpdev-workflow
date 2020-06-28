@@ -4,7 +4,6 @@
     "private": true,
     "devDependencies": {
         "@wpackio/scripts": "^4.3.0",
-        "del": "^5.1.0",
         "fs-extra": "^8.1.0",
         "gulp": "^4.0.2",
         "gulp-batch-replace": "0.0.0",
