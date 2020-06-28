@@ -29,7 +29,7 @@
         "deploy2git": "gulp deploy2git",
         "deploy2ftp": "gulp deploy2ftp",
         "clearftp": "gulp clearftp",
-        "updatedpm": "gulp updatedpm",
+        "pulldpm": "gulp pulldpm",
         "pushdpm": "gulp pushdpm",
         "deploypro": "gulp deploypro",
         "deployfree": "gulp deployfree",

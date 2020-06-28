@@ -14,6 +14,7 @@ const term = require('terminal-kit').terminal;
 const cleanDest = require('gulp-clean-dest');
 const merge = require('merge-stream');
 const replace = require('gulp-batch-replace');
+const npm = require('npm');
 
 class DpWf {
 
@@ -21,26 +22,21 @@ class DpWf {
         this.config = config;
         this.initTasks();
     }
+ 
+
 
     initTasks() {
-
         gulp.task('CLEAR:FTP', this.clearFTP.bind(this));
-
         gulp.task('PROCESS:DIST_2_GIT', gulp.series(this.processDistDeployGit.bind(this)));
         gulp.task('PROCESS:DIST_2_FTP', gulp.series(this.processDistDeployFtp.bind(this), this.notifyDist2Ftp.bind(this)));
         gulp.task('PROCESS:DIST_PACK_2_FTP', gulp.series(this.processDistDeployPackFtp.bind(this), this.notifyDistPack2Ftp.bind(this)));
-
-        gulp.task('UPDATE_DP_MODULES', gulp.series(this.updateComposerDPModules.bind(this), this.buildDPModules.bind(this)));
-        gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
-        gulp.task('PUSH_SELF', this.pushSelf.bind(this));
-        gulp.task('PULL_SELF', this.pullSelf.bind(this));
+        gulp.task('PUSH_SELF', gulp.series(this.updateDpWfFromProj.bind(this), this.pushSelf.bind(this)));
+        gulp.task('PULL_SELF', gulp.series(this.updateProjFromDpWf.bind(this), this.pullSelf.bind(this)));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
         gulp.task('BUILD_DP_MODULES', gulp.series(this.buildDPModules.bind(this), this.dumpAutoload.bind(this)));
+        gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
+        gulp.task('UPDATE_DP_MODULES', gulp.series(this.updateComposerDPModules.bind(this), 'BUILD_DP_MODULES'));
         gulp.task('DUMPAUTOLOAD', this.dumpAutoload.bind(this));
-
-        
-        
-        
     }
 
    _getPackageFilesAllBuilds(root) {
@@ -218,6 +214,23 @@ class DpWf {
         }
     }
 
+    updateDpWfFromProj(done){
+        const cDir = process.cwd(); 
+        const packageJsonProj = require(path.joinSafe(cDir, 'package.json'));
+        const copyToRootPath = path.joinSafe(cDir, 'dp-wpdev-workflow', 'to-copy-to-proj-root');
+        const packageJsonDpWfPath = path.joinSafe(copyToRootPath, 'package.json');
+        const packageJsonDpWf = require(packageJsonDpWfPath);
+        if (packageJsonProj && packageJsonDpWf)
+        {
+            packageJsonDpWf.devDependencies = packageJsonProj.devDependencies;
+            packageJsonDpWf.scripts = packageJsonProj.scripts;
+            fs.outputJSONSync(packageJsonDpWfPath, packageJsonDpWf, { spaces: 4 });
+        }
+        term.yellow('Pushing SELF: consider to adjust dp-wpdev-workflow.json file in tp-copy-to-proj-root-and-edit folder, if you made a config system change.\n');
+        return gulp.src(path.joinSafe(cDir, 'gulpfile.js'))
+            .pipe(gulp.dest(copyToRootPath));
+    }
+
     pushSelf(done) {
         var argv = require('yargs').argv;
         var dirBkp = process.cwd();
@@ -225,8 +238,61 @@ class DpWf {
         this.pushGitModule( [path.joinSafe(dirBkp,'dp-wpdev-workflow')], 0, commitMessage, done);  
     }
 
+    updateProjFromDpWf(done){
+        const cDir = process.cwd(); 
+        const packageJsonProj = require(path.joinSafe(cDir, 'package.json'));
+        const copyToRootPath = path.joinSafe(cDir, 'dp-wpdev-workflow', 'to-copy-to-proj-root');
+        const packageJsonDpWfPath = path.joinSafe(copyToRootPath, 'package.json');
+        const packageJsonDpWf = require(packageJsonDpWfPath);
+        if (packageJsonDpWf && packageJsonProj)
+        {
+            var shouldWritePackageJson = false;
+            var shouldInstallNpm = false;
+            if (JSON.stringify(packageJsonDpWf.devDependencies) !== JSON.stringify(packageJsonProj.devDependencies))
+            {
+                term.yellow('Pulling SELF: Updating dev dependencies in project\'s package.json ...\n');
+                packageJsonProj.devDependencies = packageJsonDpWf.devDependencies;
+                shouldWritePackageJson = true;
+                shouldInstallNpm = true;
+            }
+            if (JSON.stringify(packageJsonDpWf.scripts) !== JSON.stringify(packageJsonProj.scripts))
+            {
+                term.yellow('Pulling SELF: Updating scripts in project\'s package.json ...\n');
+                packageJsonProj.scripts = packageJsonDpWf.scripts;
+                shouldWritePackageJson = true;
+            }
+            if (shouldWritePackageJson)
+            {
+                fs.outputJSONSync(path.joinSafe(cDir, 'package.json'), packageJsonProj, { spaces: 4 });
+            }
+            if (shouldInstallNpm)
+            {
+                npm.load( (err) => {
+                    term.yellow('Pulling SELF: Installing new dev dependencies ...\n');
+                    // install module ffi
+                    npm.commands.install([], (er, data) => {
+                        if (er) term.red(er + '\n');
+                        if (data) term(data + '\n');
+                        return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
+                            .pipe(gulp.dest(cDir)); 
+
+                    });
+                
+                    npm.on('log', (message) => {
+                        term(message + '\n');
+                    });
+                });   
+            }
+            else return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
+                .pipe(gulp.dest(cDir)); 
+        }
+        else return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
+            .pipe(gulp.dest(cDir)); 
+        
+     
+    }
+
     pullSelf(done) {
-        var argv = require('yargs').argv;
         var dirBkp = process.cwd();
         this.pullGitModule( [path.joinSafe(dirBkp,'dp-wpdev-workflow')], 0, done);  
     }
