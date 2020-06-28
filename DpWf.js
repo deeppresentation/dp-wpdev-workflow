@@ -31,7 +31,7 @@ class DpWf {
         gulp.task('PROCESS:DIST_2_FTP', gulp.series(this.processDistDeployFtp.bind(this), this.notifyDist2Ftp.bind(this)));
         gulp.task('PROCESS:DIST_PACK_2_FTP', gulp.series(this.processDistDeployPackFtp.bind(this), this.notifyDistPack2Ftp.bind(this)));
         gulp.task('PUSH_SELF', gulp.series(this.updateDpWfFromProj.bind(this), this.pushSelf.bind(this)));
-        gulp.task('PULL_SELF', gulp.series(/*this.pullSelf.bind(this), */ this.updateProjGulpfileFromDpWf.bind(this), this.updateProjPackageJsonFromDpWf.bind(this)));
+        gulp.task('PULL_SELF', gulp.series(this.pullSelf.bind(this), this.updateProjGulpfileFromDpWf.bind(this), this.updateProjPackageJsonFromDpWf.bind(this)));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
         gulp.task('BUILD_DP_MODULES', gulp.series(this.buildDPModules.bind(this), this.dumpAutoload.bind(this)));
         gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
@@ -268,33 +268,33 @@ class DpWf {
                 packageJsonProj.scripts = packageJsonDpWf.scripts;
                 shouldWritePackageJson = true;
             }
-            shouldWritePackageJson = true;
-            shouldInstallNpm = true;
             if (shouldWritePackageJson)
             {
                 if (shouldInstallNpm) term.yellow("Your package.json is not up-to-date. Should I update it and install missing dev dependencies? (Y/[n])\n");
                 else term.yellow("Your package.json is not up-to-date. Should I update it? (Y/[n])\n");
                 term.yesOrNo( { yes: [ 'y' , 'ENTER' ] , no: [ 'n' ] } , ( error , result ) => {
-        
+                    var result = true;
                     if ( result ) {
                         term.brightGreen('Updating package.json ... \n');
                         fs.outputJSONSync(path.joinSafe(cDir, 'package.json'), packageJsonProj, { spaces: 4 });
 
                         if (shouldInstallNpm)
                         {
-                            /*function printNpmLog(message){
+                            function printNpmLog(message){
                                 term(message + '\n');
-                            }*/
+                            }
+                            if (done) done();
                             npm.load( (err) => {
                                 term.brightGreen('Pulling SELF: Installing new dev dependencies ...\n');
-                                //npm.on('log', printNpmLog);
-                               /* npm.commands.install(['--quiet'], function (er, data){
-                                    //if (er) term.red(er + '\n');
-                                    //if (data) term(data + '\n');
-                                    //npm.off('log', printNpmLog);
+                                npm.on('log', printNpmLog);
+                                 npm.commands.install([], function (er, data){
+                                    if (er) term.red(er + '\n');
+                                    npm.off('log', printNpmLog);
                                     if (done) done();
-                                });*/
-                            });   
+                                    process.exit() ;
+                                });
+                            
+                            }); 
                         } else if (done) done();
                     } else if (done) done();
                 });
