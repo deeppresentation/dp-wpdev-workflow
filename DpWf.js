@@ -35,7 +35,10 @@ class DpWf {
         gulp.task('PUSH_SELF', this.pushSelf.bind(this));
         gulp.task('PULL_SELF', this.pullSelf.bind(this));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
-        gulp.task('BUILD_DP_MODULES', this.buildDPModules.bind(this));
+        gulp.task('BUILD_DP_MODULES', gulp.series(this.buildDPModules.bind(this), this.dumpAutoload.bind(this)));
+        gulp.task('DUMPAUTOLOAD', this.dumpAutoload.bind(this));
+
+        
         
         
     }
@@ -123,6 +126,16 @@ class DpWf {
         notifier.notify({
             title: '✅  UPDATED',
             message: 'Deep presentation PHP modules was updated trough composer.',
+            icon: path.joinSafe(__dirname, dpLogo)
+        });
+        if (done) done();
+    }
+
+    dumpAutoload(done) {
+        composer('dumpautoload -o');
+        notifier.notify({
+            title: '✅  COMPOSER AUTOLOAD DUMPED',
+            message: 'Autoload files was updated.',
             icon: path.joinSafe(__dirname, dpLogo)
         });
         if (done) done();
