@@ -2,8 +2,6 @@ const dpwf = require('./dp-wpdev-workflow.json');
 const camelCase = require('camelcase');
 const dpWfHelper = require('./dp-wpdev-workflow/DpWfHelper');
 
-dpWfHelper.writeBuildTypePhp();// add PRO or FREE define to dp-build-type.php
-
 
 module.exports = {
 	// Project Identity
