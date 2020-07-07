@@ -26,17 +26,19 @@ class DpWf {
 
 
     initTasks() {
-        gulp.task('CLEAR:FTP', this.clearFTP.bind(this));
-        gulp.task('PROCESS:DIST_2_GIT', gulp.series(this.processDistDeployGit.bind(this)));
-        gulp.task('PROCESS:DIST_2_FTP', gulp.series(this.processDistDeployFtp.bind(this), this.notifyDist2Ftp.bind(this)));
-        gulp.task('PROCESS:DIST_PACK_2_FTP', gulp.series(this.processDistDeployPackFtp.bind(this), this.notifyDistPack2Ftp.bind(this)));
+        // DEPLOY
+        gulp.task('CLEAR_FTP', this.clearFTP.bind(this));
+        gulp.task('DEPLOY_2_GIT', gulp.series(this.deploy2Git.bind(this)));
+        gulp.task('DEPLOY_2_FTP', gulp.series(this.deploy2Ftp.bind(this), this.notifyDeploy2Ftp.bind(this)));
+        gulp.task('DEPLOY_2_DP', gulp.series(this.deployPack2Dp.bind(this), this.notifyDeployPack2Dp.bind(this)));
+        gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deploy2WordpressOrg.bind(this)));
+        
+        gulp.task('PREFIX_PHP_MODULES', gulp.series(this.prefixPhpModules.bind(this), this.dumpAutoload.bind(this)));
         gulp.task('PUSH_SELF', gulp.series(this.updateDpWfFromProj.bind(this), this.pushSelf.bind(this)));
         gulp.task('PULL_SELF', gulp.series(this.pullSelf.bind(this), this.updateProjGulpfileFromDpWf.bind(this), this.updateProjPackageJsonFromDpWf.bind(this)));
-        gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deployPackFilesToWordpressOrg.bind(this)));
-        gulp.task('BUILD_DP_MODULES', gulp.series(this.buildDPModules.bind(this), this.dumpAutoload.bind(this)));
         gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
-        gulp.task('UPDATE_DP_MODULES', gulp.series(this.updateComposerDPModules.bind(this), 'BUILD_DP_MODULES'));
-        gulp.task('DUMPAUTOLOAD', this.dumpAutoload.bind(this));
+        gulp.task('PULL_DP_MODULES', gulp.series(this.updateComposerDPModules.bind(this), 'PREFIX_PHP_MODULES'));
+       
     }
 
    _getPackageFilesAllBuilds(root) {
@@ -56,7 +58,7 @@ class DpWf {
         if (done) done();
     }
 
-    processDistDeployPackFtp(done){
+    deployPack2Dp(done){
         if (this.config.ftp) {
             var conn = ftp.create(this.config.ftp);
             return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId() + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
@@ -67,7 +69,7 @@ class DpWf {
     }
     
 
-    processDistDeployFtp(done) {
+    deploy2Ftp(done) {
 
         if (this.config.ftp) {
             var conn = ftp.create(this.config.ftp);
@@ -78,7 +80,7 @@ class DpWf {
         else if (done) done();
     }
 
-    notifyDist2Ftp(done) {
+    notifyDeploy2Ftp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
             message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDir),
@@ -87,7 +89,7 @@ class DpWf {
         if (done) done();
     }
 
-    notifyDistPack2Ftp(done) {
+    notifyDeployPack2Dp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION PACKAGE WAS DEPLOYED TO FTP',
             message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDirZip),
@@ -96,7 +98,7 @@ class DpWf {
         if (done) done();
     }
 
-    processDistDeployGit(done) {
+    deploy2Git(done) {
 
         var simpleGit = require('simple-git')(path.resolve(this.config.package.dir));
         var argv = require('yargs').argv;
@@ -144,7 +146,7 @@ class DpWf {
             .map(dirent => path.joinSafe(source, dirent.name))
     }
 
-    buildDPModules(done){
+    prefixPhpModules(done){
         if (dpwfCfg.phpScoper && dpwfCfg.phpScoper.modules)
         {   
             var cdir = process.cwd();
@@ -353,7 +355,7 @@ class DpWf {
         else if (done) done();
     }
 
-    deployPackFilesToWordpressOrg(){
+    deploy2WordpressOrg(){
         return gulp.src(path.joinSafe(this.config.package.dir, this.config.id, '**', '*'))
         .pipe(gulp.dest(path.joinSafe(this.config.wordpressOrgSvnBaseDir, this.config.id, 'trunk')));
     }

@@ -4,16 +4,21 @@ const gulp = require( 'gulp' );
 
 new DpWf(dpwfconfig);
 
-exports.default = gulp.series('BUILD_DP_MODULES');
-exports.pulldpm = gulp.series('UPDATE_DP_MODULES');
+exports.default = gulp.series('PREFIX_PHP_MODULES');
+
+
+// DEPLOY
+exports.clearftp = gulp.series('CLEAR_FTP');
+exports.deploy2git = gulp.series('DEPLOY_2_GIT');
+exports.deploy2ftp = gulp.series('DEPLOY_2_FTP');
+exports.deploy2dp = gulp.series('DEPLOY_2_DP');
+exports.deploy2wp =  gulp.series('DEPLOY_2_WP_ORG');
+
+// DP DEV
+exports.prefix = gulp.series('PREFIX_PHP_MODULES');
+exports.pulldpm = gulp.series('PULL_DP_MODULES');
 exports.pushdpm = gulp.series('PUSH_DP_MODULES');
 exports.pushself = gulp.series('PUSH_SELF');
 exports.pullself = gulp.series('PULL_SELF');
-exports.deploy2git = gulp.series('PROCESS:DIST_2_GIT');
-exports.deploy2ftp = gulp.series('PROCESS:DIST_2_FTP');
-exports.clearftp = gulp.series('CLEAR:FTP');
-exports.deploypro = gulp.series('PROCESS:DIST_PACK_2_FTP');
-exports.deployfree =  gulp.series('DEPLOY_2_WP_ORG');
-exports.pulldp = gulp.series('PULL_SELF', 'UPDATE_DP_MODULES');
+exports.pulldp = gulp.series('PULL_SELF', 'PULL_DP_MODULES');
 exports.pushdp = gulp.series('PUSH_SELF', 'PUSH_DP_MODULES');
-exports.prefix = gulp.series('BUILD_DP_MODULES');
