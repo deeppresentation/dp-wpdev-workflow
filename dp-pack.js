@@ -10,7 +10,9 @@ dpwfHelper.setActualScriptType('pack');
 del.sync( path.joinSafe(dpwf.package.dir, '**/*'), {force: true});
 term.green( `√ Pack directory ${dpwf.package.dir} was cleared. \n` );
 
-
+const version = dpwfHelper.getSubItemPerBuild('product', 'version');
+const title = dpwfHelper.getTitle();
+term.yellow( `√ Packking ${title} version ${version}. \n` );
 
 dpwfHelper.actualizeReadmePerBuildTypeBeforePack();
 
