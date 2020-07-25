@@ -207,6 +207,7 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
     Object.keys(dpwf.product).forEach(key => {
         $keyUpperCase = key.toUpperCase();
         if (dpwf.product[key].link) res += `define('${definePrefix}_PRODUCT_LINK_${$keyUpperCase}', "${dpwf.product[key].link}");\n`;
+        if (dpwf.product[key].featuresLink) res += `define('${definePrefix}_PRODUCT_FEATURES_LINK_${$keyUpperCase}', "${dpwf.product[key].featuresLink}");\n`;
         if (dpwf.product[key].keyBuyLink) res += `define('${definePrefix}_KEY_LINK_${$keyUpperCase}', "${dpwf.product[key].keyBuyLink}");\n`;
         if (dpwf.product[key].askForRatingLink) res += `define('${definePrefix}_ASK_FOR_RATING_LINK_${$keyUpperCase}', "${dpwf.product[key].askForRatingLink}");\n`;
 
