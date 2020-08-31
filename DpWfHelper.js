@@ -200,10 +200,12 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
 
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
+define('${definePrefix}_BUILD_SUB_TYPE', '${dpwf.buildSubType ? dpwf.buildSubType : ''}');
 define('${definePrefix}_DP_DEBUG_EN', ${debugEn});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 `;
+
     Object.keys(dpwf.product).forEach(key => {
         $keyUpperCase = key.toUpperCase();
         if (dpwf.product[key].link) res += `define('${definePrefix}_PRODUCT_LINK_${$keyUpperCase}', "${dpwf.product[key].link}");\n`;
