@@ -200,11 +200,26 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
 
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
-define('${definePrefix}_BUILD_SUB_TYPE', '${dpwf.buildSubType ? dpwf.buildSubType : ''}');
+define('${definePrefix}_ADMINATOR', '${dpwf.adminator ? dpwf.adminator : ''}');
 define('${definePrefix}_DP_DEBUG_EN', ${debugEn});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 `;
+
+    switch (dpwf.adminator)
+    {
+        case 'SELL_CODES': 
+        res += (
+`define('${definePrefix}_ADMINATOR_END_POINT', 'https://sellcodes.com/api/v2/licenses');
+define('${definePrefix}_SELLCODES_OFFER_ID','${dpwf.sellCodesOfferId}');
+`);
+        break;
+        case 'DEEP_PRESENTATION':
+            res += (
+`define('${definePrefix}_ADMINATOR_END_POINT', 'https://deeppresentation.com/wp-json/lmfwc/v2/licenses/');
+`);
+        break;
+    }
 
     Object.keys(dpwf.product).forEach(key => {
         $keyUpperCase = key.toUpperCase();
