@@ -200,41 +200,37 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
 
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
-define('${definePrefix}_ADMINATOR', '${dpwf.adminator ? dpwf.adminator : ''}');
+define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('product', 'adminator')}');
 define('${definePrefix}_DP_DEBUG_EN', ${debugEn});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 `;
 
-    switch (dpwf.adminator)
-    {
-        case 'SELL_CODES': 
-        res += (
-`define('${definePrefix}_ADMINATOR_END_POINT', 'https://sellcodes.com/api/v2/licenses');
-define('${definePrefix}_SELLCODES_OFFER_ID','${dpwf.sellCodesOfferId}');
-`);
-        break;
-        case 'DEEP_PRESENTATION':
-            res += (
-`define('${definePrefix}_ADMINATOR_END_POINT', 'https://deeppresentation.com/wp-json/lmfwc/v2/licenses/');
-`);
-        break;
-    }
+    res += getDefineInBuildType(definePrefix, 'product', 'updateKey', dpwf.buildType, 'PRODUCT_UPDATE_KEY');
+    res += getDefineInBuildType(definePrefix, 'product', 'adminatorEndpoint', dpwf.buildType, 'PRODUCT_ADMINATOR_END_POINT');
 
-    Object.keys(dpwf.product).forEach(key => {
-        $keyUpperCase = key.toUpperCase();
-        if (dpwf.product[key].link) res += `define('${definePrefix}_PRODUCT_LINK_${$keyUpperCase}', "${dpwf.product[key].link}");\n`;
-        if (dpwf.product[key].featuresLink) res += `define('${definePrefix}_PRODUCT_FEATURES_LINK_${$keyUpperCase}', "${dpwf.product[key].featuresLink}");\n`;
-        if (dpwf.product[key].keyBuyLink) res += `define('${definePrefix}_KEY_LINK_${$keyUpperCase}', "${dpwf.product[key].keyBuyLink}");\n`;
-        if (dpwf.product[key].askForRatingLink) res += `define('${definePrefix}_ASK_FOR_RATING_LINK_${$keyUpperCase}', "${dpwf.product[key].askForRatingLink}");\n`;
 
-        if (dpwf.product[key].title) res += `define('${definePrefix}_NAME_${$keyUpperCase}', "${dpwf.product[key].title}");\n`;
-        else if (dpwf.title) res += `define('${definePrefix}_NAME_${$keyUpperCase}', "${dpwf.title}");\n`;
+    Object.keys(dpwf.product).forEach(buildType => {
+        res += getDefineInBuildType(definePrefix, 'product', 'link', buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'featuresLink', buildType, 'PRODUCT_FEATURES_LINK');
+        res += getDefineInBuildType(definePrefix, 'product', 'keyBuyLink', buildType, 'PRODUCT_KEY_BUY_LINK');
+        res += getDefineInBuildType(definePrefix, 'product', 'askForRatingLink', buildType, 'PRODUCT_ASK_FOR_RATING_LINK');
+        res += getDefineInBuildType(definePrefix, 'product', 'title', buildType);
     });
     res += '?>\n';
 
 
     fs.outputFileSync('./dp-build-type.php', res);
+}
+
+function getDefineInBuildType(definePrefix, itemName, subItemName, buildTypeOverride = null, defineNameOverride = null){
+    var val = module.exports.getSubItemPerBuild(itemName, subItemName, '', buildTypeOverride);
+    if (val){ 
+        var defineName = defineNameOverride ? defineNameOverride.toUpperCase() : (itemName + '_' + subItemName).toUpperCase();
+        var buildType = buildTypeOverride ? buildTypeOverride.toUpperCase() : dpwf.buildType.toUpperCase(); 
+        return `define('${definePrefix}_${defineName}_${buildType}', "${val}");\n`; 
+    }
+    return '';
 }
 
 module.exports.incrementVersion = function (currentVersion, versionTypeToIncrement = 'build') {
@@ -289,25 +285,24 @@ module.exports.setSubItemPerBuild = function (itemName, subItemName, val) {
     return false;
 }
 
-module.exports.getSubItemPerBuild = function (itemName, subItemName, def = '') {
+module.exports.getSubItemPerBuild = function (itemName, subItemName, def = '', buildTypeOverride = null) {
     var subItem = def;
     var item = dpwf[itemName];
+    var buildType = buildTypeOverride ? buildTypeOverride : dpwf.buildType;
     if (item) {
-        if (item[dpwf.buildType]) {
-            subItem = item[dpwf.buildType][subItemName];
+        if (item[buildType]) {
+            subItem = item[buildType][subItemName];
+            var adminator = dpwf.product[buildType].adminator;
+            if (adminator && item[buildType][adminator] && item[buildType][adminator][subItemName] != undefined){
+                subItem =item[buildType][adminator][subItemName];
+            }
         }
     }
     return subItem;
 }
 
 module.exports.getTitle = function () {
-    var title = dpwf.title;
-    var product = dpwf.product;
-    if (dpwf.product && dpwf.product[dpwf.buildType]) {
-        product = dpwf.product[dpwf.buildType];
-    }
-    if (product.title) title = product.title;
-    return title;
+    return module.exports.getSubItemPerBuild('product', 'title');
 }
 
 module.exports.getPackageId = function () {
@@ -358,7 +353,7 @@ function generateWpPluginInfoHeadrData(version) {
 *
 * @link              ${dpwf.autorLink}
 * @since             1.0.0
-* @package           ${replaceString(dpwf.title, ' ', '_')}
+* @package           ${replaceString(pluginName, ' ', '_')}
 *
 * @wordpress-plugin
 * Plugin Name:       ${pluginName}
@@ -442,8 +437,9 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
         buildTypeModified = buildTypeModifier !== dpwf.buildType;
         dpwf.buildType = buildTypeModifier;
     }
-
-    term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}\n`);
+    
+    var adminator = module.exports.getSubItemPerBuild('product', 'adminator');
+    term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}${adminator ? ' License type: ' + adminator : ''}\n`);
 
     const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
     const newVersion = module.exports.printWpPluginInfoHeadr(indexPhpFile, indexPhpFile, versionTypeToIncrement, buildTypeModified);
