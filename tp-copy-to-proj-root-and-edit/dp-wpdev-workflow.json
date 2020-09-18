@@ -1,6 +1,5 @@
 {
     "id": "{project-slug}",
-    "title": "{Human read name}",
     "type": "{plugin-or-theme}",
     "author": "Tomas Groulik <tomas.groulik@gmail.com>",
     "autorLink": "https://deeppresentation.com",
@@ -24,19 +23,31 @@
     },
     "product": {
         "FREE": {
+            "title": "{Human read name}",
             "version": "0.0.0",
             "link": "https://wordpress.org/plugins/{project-slug}",
             "desc": "{Description of FREE version}",
             "askForRatingLink": "https://wordpress.org/support/plugin/{project-slug}/reviews/"
         },
         "PRO": {
+            "adminator": "DEEP_PRESENTATION",
             "sourcMapsDisable": true,
             "packageId": "{project-slug}-pro",
             "version": "0.0.0",
             "title": "{Human read name } PRO",
             "link": "https://deeppresentation.com/web/plugins/{project-slug}",
             "desc": "{Description of PRO version}",
-            "keyBuyLink": "https://deeppresentation.com/shop/"
+            "DEEP_PRESENTATION": {
+                "keyBuyLink": "https://deeppresentation.com/shop/",
+                "askForRatingLink": "https://deeppresentation.com/product/intro-tours-plugin-for-wordpress-pro-1-year/#reviews",
+                "adminatorEndpoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
+            },
+            "SELL_CODES": {
+                "updateKey": "v4BSgrdT",
+                "keyBuyLink": "https://sellcodes.com/v4BSgrdT",
+                "askForRatingLink": "https://sellcodes.com/v4BSgrdT/#refine",
+                "adminatorEndpoint": "https://sellcodes.com/api/v2/licenses"
+            }
         }
     },
     "license": {
