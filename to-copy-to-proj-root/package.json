@@ -4,6 +4,7 @@
     "private": true,
     "devDependencies": {
         "@wpackio/scripts": "^4.3.0",
+        "@svgr/webpack": "^5.4.0",
         "del": "^5.1.0",
         "fs-extra": "^8.1.0",
         "gulp": "^4.0.2",
@@ -43,14 +44,8 @@
     },
     "dependencies": {
         "@wpackio/entrypoint": "^4.3.0",
-        "axios": "^0.19.2",
-        "axios-error": "^0.8.1",
         "classnames": "^2.2.6",
         "color": "^3.1.2",
-        "color-blend": "^2.0.9",
-        "unique-selector": "^0.4.1",
-        "url-join": "^4.0.1",
-        "url-parse": "^1.4.7",
-        "waypoints": "^4.0.1"
+        "url-join": "^4.0.1"
     }
 }
