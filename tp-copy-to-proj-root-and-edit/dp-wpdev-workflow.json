@@ -31,7 +31,7 @@
         },
         "PRO": {
             "adminator": "DEEP_PRESENTATION",
-            "sourcMapsDisable": true,
+            "sourceMapsDisable": true,
             "packageId": "{project-slug}-pro",
             "version": "0.0.0",
             "title": "{Human read name } PRO",
@@ -40,13 +40,13 @@
             "DEEP_PRESENTATION": {
                 "keyBuyLink": "https://deeppresentation.com/shop/",
                 "askForRatingLink": "https://deeppresentation.com/product/intro-tours-plugin-for-wordpress-pro-1-year/#reviews",
-                "adminatorEndpoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
+                "adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
             },
             "SELL_CODES": {
                 "updateKey": "v4BSgrdT",
                 "keyBuyLink": "https://sellcodes.com/v4BSgrdT",
                 "askForRatingLink": "https://sellcodes.com/v4BSgrdT/#refine",
-                "adminatorEndpoint": "https://sellcodes.com/api/v2/licenses"
+                "adminatorEndPoint": "https://sellcodes.com/api/v2/licenses"
             }
         }
     },

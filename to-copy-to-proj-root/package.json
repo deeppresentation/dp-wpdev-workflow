@@ -18,6 +18,7 @@
         "npm-run-script": "0.0.4",
         "replace-string": "^3.0.0",
         "simple-git": "^2.6.0",
+        "snake-case": "^3.0.3",
         "terminal-kit": "^1.33.15",
         "upath": "^1.2.0",
         "vinyl-ftp": "^0.6.1",

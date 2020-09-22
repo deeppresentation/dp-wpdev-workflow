@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
 const path = require('upath');
-
+const snakeCase = require('snake-case').snakeCase;
 
 
 
@@ -132,7 +132,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
     } = require('@wpackio/scripts');
     var disableSourceMaps = false;
     if (!isDev){
-        disableSourceMaps = module.exports.getSubItemPerBuild('product', 'sourcMapsDisable', false);
+        disableSourceMaps = module.exports.getSubItemPerBuild('product', 'sourceMapsDisable', false);
     }
     const customRules = {
         devtool: disableSourceMaps ? false : 'source-map',
@@ -206,16 +206,20 @@ define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product'
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 `;
 
-    res += getDefineInBuildType(definePrefix, 'product', 'updateKey', dpwf.buildType, 'PRODUCT_UPDATE_KEY');
-    res += getDefineInBuildType(definePrefix, 'product', 'adminatorEndpoint', dpwf.buildType, 'PRODUCT_ADMINATOR_END_POINT');
+    res += getDefineInBuildType(definePrefix, 'product', 'updateKey');
+    res += getDefineInBuildType(definePrefix, 'product', 'adminatorEndPoint');
+
+    res += getDefineInBuildType(definePrefix, 'tracking', 'enabled', false);
+    res += getDefineInBuildType(definePrefix, 'tracking', 'clientId', false);
+    res += getDefineInBuildType(definePrefix, 'tracking', 'clientSecret', false);
 
 
     Object.keys(dpwf.product).forEach(buildType => {
-        res += getDefineInBuildType(definePrefix, 'product', 'link', buildType);
-        res += getDefineInBuildType(definePrefix, 'product', 'featuresLink', buildType, 'PRODUCT_FEATURES_LINK');
-        res += getDefineInBuildType(definePrefix, 'product', 'keyBuyLink', buildType, 'PRODUCT_KEY_BUY_LINK');
-        res += getDefineInBuildType(definePrefix, 'product', 'askForRatingLink', buildType, 'PRODUCT_ASK_FOR_RATING_LINK');
-        res += getDefineInBuildType(definePrefix, 'product', 'title', buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'link', true, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'featuresLink', true, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'keyBuyLink', true, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'askForRatingLink', true, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'title', true, buildType);
     });
     res += '?>\n';
 
@@ -223,12 +227,18 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
     fs.outputFileSync('./dp-build-type.php', res);
 }
 
-function getDefineInBuildType(definePrefix, itemName, subItemName, buildTypeOverride = null, defineNameOverride = null){
+function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypePostfix = true, buildTypeOverride = null, defineNameOverride = null){
     var val = module.exports.getSubItemPerBuild(itemName, subItemName, '', buildTypeOverride);
     if (val){ 
-        var defineName = defineNameOverride ? defineNameOverride.toUpperCase() : (itemName + '_' + subItemName).toUpperCase();
-        var buildType = buildTypeOverride ? buildTypeOverride.toUpperCase() : dpwf.buildType.toUpperCase(); 
-        return `define('${definePrefix}_${defineName}_${buildType}', "${val}");\n`; 
+        var defineName = defineNameOverride ? defineNameOverride.toUpperCase() : snakeCase(itemName + '_' + subItemName).toUpperCase();
+        
+        if (addBuildTypePostfix){
+            var buildType = buildTypeOverride ? buildTypeOverride.toUpperCase() : dpwf.buildType.toUpperCase(); 
+            return `define('${definePrefix}_${defineName}_${buildType}', "${val}");\n`; 
+        }
+        else{
+            return `define('${definePrefix}_${defineName}', "${val}");\n`; 
+        }
     }
     return '';
 }
