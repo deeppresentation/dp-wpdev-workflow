@@ -202,7 +202,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 
 module.exports.writeBuildTypePhp = function (debugEn = false) {
     const definePrefix = replaceString(dpwf.id, '-', '_').toUpperCase();
-
+    var remove3rdLinks = module.exports.getSubItemPerBuild('product', 'removeAll3rdLinks', false);
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
 define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('product', 'adminator')}');
@@ -211,8 +211,10 @@ define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product'
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 `;
 
-    res += getDefineInBuildType(definePrefix, 'product', 'updateKey');
-    res += getDefineInBuildType(definePrefix, 'product', 'adminatorEndPoint');
+    
+    
+    res += getDefineInBuildType(definePrefix, 'product', 'updateKey', false);
+    res += getDefineInBuildType(definePrefix, 'product', 'adminatorEndPoint', false);
 
     res += getDefineInBuildType(definePrefix, 'tracking', 'enabled', false);
     res += getDefineInBuildType(definePrefix, 'tracking', 'clientId', false);
@@ -220,32 +222,31 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 
 
     Object.keys(dpwf.product).forEach(buildType => {
-        res += getDefineInBuildType(definePrefix, 'product', 'link', true, buildType);
-        res += getDefineInBuildType(definePrefix, 'product', 'featuresLink', true, buildType);
-        res += getDefineInBuildType(definePrefix, 'product', 'keyBuyLink', true, buildType);
-        res += getDefineInBuildType(definePrefix, 'product', 'askForRatingLink', true, buildType);
-        res += getDefineInBuildType(definePrefix, 'product', 'title', true, buildType);
-    });
+        var overrideValAsEmpty = dpwf.buildType === 'PRO' && buildType === 'FREE';
+        res += getDefineInBuildType(definePrefix, 'product', 'link', true, overrideValAsEmpty, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'featuresLink', true, overrideValAsEmpty, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'keyBuyLink', true, overrideValAsEmpty, buildType );
+        res += getDefineInBuildType(definePrefix, 'product', 'askForRatingLink', true, overrideValAsEmpty, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'title', true, overrideValAsEmpty, buildType);
+    }
+    );
     res += '?>\n';
 
 
     fs.outputFileSync('./dp-build-type.php', res);
 }
 
-function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypePostfix = true, buildTypeOverride = null, defineNameOverride = null){
-    var val = module.exports.getSubItemPerBuild(itemName, subItemName, '', buildTypeOverride);
-    if (val){ 
-        var defineName = defineNameOverride ? defineNameOverride.toUpperCase() : snakeCase(itemName + '_' + subItemName).toUpperCase();
-        
-        if (addBuildTypePostfix){
-            var buildType = buildTypeOverride ? buildTypeOverride.toUpperCase() : dpwf.buildType.toUpperCase(); 
-            return `define('${definePrefix}_${defineName}_${buildType}', "${val}");\n`; 
-        }
-        else{
-            return `define('${definePrefix}_${defineName}', "${val}");\n`; 
-        }
+function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypePostfix = true, overrideValAsEmpty = false, buildTypeOverride = null, defineNameOverride = null){
+    var val = module.exports.getSubItemPerBuild(itemName, subItemName,'', buildTypeOverride);
+    if (overrideValAsEmpty) val = '';
+    var defineName = defineNameOverride ? defineNameOverride.toUpperCase() : snakeCase(itemName + '_' + subItemName).toUpperCase();
+    if (addBuildTypePostfix){
+        var buildType = buildTypeOverride ? buildTypeOverride.toUpperCase() : dpwf.buildType.toUpperCase(); 
+        return `define('${definePrefix}_${defineName}_${buildType}', "${val}");\n`; 
     }
-    return '';
+    else{
+        return `define('${definePrefix}_${defineName}', "${val}");\n`; 
+    }
 }
 
 module.exports.incrementVersion = function (currentVersion, versionTypeToIncrement = 'build') {
@@ -313,6 +314,7 @@ module.exports.getSubItemPerBuild = function (itemName, subItemName, def = '', b
             }
         }
     }
+    if (subItem == undefined) subItem = def;
     return subItem;
 }
 
