@@ -27,7 +27,8 @@
             "version": "0.0.0",
             "link": "https://wordpress.org/plugins/{project-slug}",
             "desc": "{Description of FREE version}",
-            "askForRatingLink": "https://wordpress.org/support/plugin/{project-slug}/reviews/"
+            "askForRatingLink": "https://wordpress.org/support/plugin/{project-slug}/reviews/",
+            "ratingFeedbackLink": "https://deeppresentation.com/wp-json/dp-feedback/{project-slug}/v1/"
         },
         "PRO": {
             "adminator": "DEEP_PRESENTATION",
