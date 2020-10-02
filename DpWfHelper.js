@@ -202,7 +202,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 
 module.exports.writeBuildTypePhp = function (debugEn = false) {
     const definePrefix = replaceString(dpwf.id, '-', '_').toUpperCase();
-    var remove3rdLinks = module.exports.getSubItemPerBuild('product', 'removeAll3rdLinks', false);
+
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
 define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('product', 'adminator')}');
