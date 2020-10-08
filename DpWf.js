@@ -59,11 +59,11 @@ class DpWf {
     }
 
     deployPack2Dp(done){
-        if (this.config.ftp) {
-            var conn = ftp.create(this.config.ftp);
+        if (this.config.packageFtp) {
+            var conn = ftp.create(this.config.packageFtp);
             return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId() + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
-                .pipe(conn.newerOrDifferentSize(this.config.ftp.baseDirZip)) // only upload newer files
-                .pipe(conn.dest(this.config.ftp.baseDirZip));
+                .pipe(conn.newerOrDifferentSize(this.config.packageFtp.baseDir)) // only upload newer files
+                .pipe(conn.dest(this.config.packageFtp.baseDir));
         }
         else if (done) done();
     }

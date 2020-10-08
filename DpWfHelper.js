@@ -371,7 +371,7 @@ function generateWpPluginInfoHeadrData(version) {
 
     var res = `/*
 *
-* @link              ${dpwf.autorLink}
+* @link              ${dpwf.author.uri}
 * @since             1.0.0
 * @package           ${replaceString(pluginName, ' ', '_')}
 *
@@ -380,8 +380,8 @@ function generateWpPluginInfoHeadrData(version) {
 * Plugin URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
 * Description:       ${module.exports.getSubItemPerBuild('product', 'desc')}
 * Version:           ${version}
-* Author:            ${dpwf.author}
-* Author URI:        ${dpwf.autorLink}
+* Author:            ${dpwf.author.name}
+* Author URI:        ${dpwf.author.uri}
 * License:           ${module.exports.getSubItemPerBuild('license', 'type')}
 * License URI:       ${module.exports.getSubItemPerBuild('license', 'link')}
 * Text Domain:       ${dpwf.id}
