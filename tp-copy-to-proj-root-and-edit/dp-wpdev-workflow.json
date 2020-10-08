@@ -21,6 +21,28 @@
             ]
         }
     },
+    "tracking": {
+        "FREE": {
+            "enabled": false,
+            "clientId": "",
+            "clientSecret": ""
+        },
+        "PRO": {
+            "DEEP_PRESENTATION": {
+                "enabled": false,
+                "clientId": "",
+                "clientSecret": ""
+            },
+            "SELL_CODES": {
+                "enabled": false,
+                "clientId": "",
+                "clientSecret": ""
+            },
+            "CODE_CANYON": {
+                "enabled": false
+            }
+        }
+    },
     "product": {
         "FREE": {
             "title": "{Human read name}",
