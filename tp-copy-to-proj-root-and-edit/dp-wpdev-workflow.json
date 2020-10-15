@@ -83,7 +83,7 @@
         "FREE": {
             "type": "GPL-2.0+",
             "link": "http://www.gnu.org/licenses/gpl-2.0.txt",
-            "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpres.org plugin repositary"
+            "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpress.org plugin repository"
         },
         "PRO": {
             "type": "",
