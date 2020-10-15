@@ -57,6 +57,7 @@
         "react-transition-group": "^4.4.1",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
-        "url-join": "^4.0.1"
+        "url-join": "^4.0.1",
+        "envato": "^3.0.2"
     }
 }
