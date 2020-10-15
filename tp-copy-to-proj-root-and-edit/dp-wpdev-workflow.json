@@ -48,6 +48,14 @@
             "desc": "${description}",
             "askForRatingLink": "",
             "ratingFeedbackLink": ""
+        },
+        "PRO": {
+            "title": "${title} PRO",
+            "version": "0.0.0",
+            "link": "",
+            "desc": "${description}",
+            "askForRatingLink": "",
+            "ratingFeedbackLink": ""
         }
     },
     "license": {
