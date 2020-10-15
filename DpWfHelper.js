@@ -216,7 +216,7 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
     res += getDefineInBuildType(definePrefix, 'product', 'updateKey', false);
     res += getDefineInBuildType(definePrefix, 'product', 'adminatorEndPoint', false);
 
-    res += getDefineInBuildType(definePrefix, 'tracking', 'enabled', false, false, null, null, true);
+    res += getDefineInBuildType(definePrefix, 'tracking', 'enabled', false, false, null, null, true, false);
     res += getDefineInBuildType(definePrefix, 'tracking', 'clientId', false);
     res += getDefineInBuildType(definePrefix, 'tracking', 'clientSecret', false);
 
@@ -237,8 +237,8 @@ define('${definePrefix}_NAME', '${module.exports.getTitle()}');
     fs.outputFileSync('./dp-build-type.php', res);
 }
 
-function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypePostfix = true, overrideValAsEmpty = false, buildTypeOverride = null, defineNameOverride = null, disableQuotes = false ){
-    var val = module.exports.getSubItemPerBuild(itemName, subItemName,'', buildTypeOverride);
+function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypePostfix = true, overrideValAsEmpty = false, buildTypeOverride = null, defineNameOverride = null, disableQuotes = false, defVal = '' ){
+    var val = module.exports.getSubItemPerBuild(itemName, subItemName, defVal, buildTypeOverride);
     if (overrideValAsEmpty) val = '';
     var finalVal = disableQuotes ? val : `"${val}"`;
     var defineName = defineNameOverride ? defineNameOverride.toUpperCase() : snakeCase(itemName + '_' + subItemName).toUpperCase();
