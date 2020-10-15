@@ -55,7 +55,27 @@
             "link": "",
             "desc": "${description}",
             "askForRatingLink": "",
-            "ratingFeedbackLink": ""
+            "ratingFeedbackLink": "",
+            "DEEP_PRESENTATION": {
+                "keyBuyLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/",
+                "askForRatingLink": "https://deeppresentation.com/product/c${id}-pro-plugin-for-wordpress/#reviews",
+                "adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
+            },
+            "SELL_CODES": {
+                "updateKey": "{selcode-update-key}",
+                "keyBuyLink": "https://sellcodes.com/{selcode-update-key}",
+                "askForRatingLink": "https://sellcodes.com/{selcode-update-key}/#refine",
+                "adminatorEndPoint": "https://sellcodes.com/api/v2/licenses"
+            },
+            "CODE_CANYON": {
+                "link": "",
+                "featuresLink": "",
+                "adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
+            },
+            "TEMPLATE_MONSTER": {
+                "link": "",
+                "featuresLink": ""
+            }
         }
     },
     "license": {
