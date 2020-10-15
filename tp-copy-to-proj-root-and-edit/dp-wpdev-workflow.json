@@ -58,7 +58,7 @@
             "ratingFeedbackLink": "",
             "DEEP_PRESENTATION": {
                 "keyBuyLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/",
-                "askForRatingLink": "https://deeppresentation.com/product/c${id}-pro-plugin-for-wordpress/#reviews",
+                "askForRatingLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/#reviews",
                 "adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
             },
             "SELL_CODES": {
