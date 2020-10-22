@@ -92,7 +92,7 @@ class DpWf {
     notifyDeployPack2Dp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION PACKAGE WAS DEPLOYED TO FTP',
-            message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDirZip),
+            message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.packageFtp.host, this.config.packageFtp.baseDir),
             icon: path.joinSafe(__dirname, dpLogo)
         });
         if (done) done();
