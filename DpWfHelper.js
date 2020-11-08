@@ -132,7 +132,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
     } = require('@wpackio/scripts');
     var disableSourceMaps = false;
     if (!isDev){
-        disableSourceMaps = module.exports.getSubItemPerBuild('product', 'sourceMapsDisable', false);
+        disableSourceMaps = !dpwf.forceDebug && module.exports.getSubItemPerBuild('product', 'sourceMapsDisable', false);
     }
     const customRules = {
         devtool: disableSourceMaps ? false : 'source-map',
@@ -206,7 +206,7 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
 define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('product', 'adminator')}');
-define('${definePrefix}_DP_DEBUG_EN', ${debugEn});
+define('${definePrefix}_DP_DEBUG_EN', ${debugEn || dpwf.forceDebug});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 `;
