@@ -63,7 +63,8 @@ class DpWf {
             var conn = ftp.create(this.config.packageFtp);
             return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId() + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
                 .pipe(conn.newerOrDifferentSize(this.config.packageFtp.baseDir)) // only upload newer files
-                .pipe(conn.dest(this.config.packageFtp.baseDir));
+                .pipe(conn.dest(this.config.packageFtp.baseDir))
+                .pipe(gulpif(this.config.packageFtp.baseDirBC, conn.dest(this.config.packageFtp.baseDirBC)));
         }
         else if (done) done();
     }
