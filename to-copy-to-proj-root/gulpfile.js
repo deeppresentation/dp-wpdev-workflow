@@ -7,7 +7,7 @@ new DpWf(dpwfconfig);
 exports.default = gulp.series('PREFIX_PHP_MODULES');
 
 
-// DEPLOY TEST
+// DEPLOY
 exports.clearftp = gulp.series('CLEAR_FTP');
 exports.deploy2git = gulp.series('DEPLOY_2_GIT');
 exports.deploy2ftp = gulp.series('DEPLOY_2_FTP');
