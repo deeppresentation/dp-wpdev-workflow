@@ -12,6 +12,7 @@ const dpLogo = 'DP-logo.png';
 const cleanDest = require('gulp-clean-dest');
 const merge = require('merge-stream');
 const replace = require('gulp-batch-replace');
+const gulpif = require('gulp-if');
 
 
 const SELF_ROOT_DIR = "dp-wpdev-workflow";
@@ -35,7 +36,12 @@ class DpWf {
         gulp.task('CLEAR_FTP', this.clearFTP.bind(this));
         gulp.task('DEPLOY_2_GIT', gulp.series(this.deploy2Git.bind(this)));
         gulp.task('DEPLOY_2_FTP', gulp.series(this.deploy2Ftp.bind(this), this.notifyDeploy2Ftp.bind(this)));
-        gulp.task('DEPLOY_2_DP', gulp.series(this.deployPack2Dp.bind(this), this.notifyDeployPack2Dp.bind(this)));
+        gulp.task('DEPLOY_2_DP', gulp.series(
+            this.deployPack2Dp.bind(this), 
+            this.notifyDeployPack2Dp.bind(this),
+            this.deployPack2DpBC.bind(this), 
+            this.notifyDeployPack2DpBC.bind(this)
+        ));
         gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deploy2WordpressOrg.bind(this)));
         
         gulp.task('PREFIX_PHP_MODULES', gulp.series(this.prefixPhpModules.bind(this), this.dumpAutoload.bind(this)));
@@ -62,15 +68,25 @@ class DpWf {
         if (done) done();
     }
 
-    deployPack2Dp(done){
-        if (this.config.packageFtp) {
+
+
+    _deployPack2Dp(done, ftpDir){
+        if (this.config.packageFtp && ftpDir) {
             var conn = ftp.create(this.config.packageFtp);
             return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId() + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
-                .pipe(conn.newerOrDifferentSize(this.config.packageFtp.baseDir)) // only upload newer files
-                .pipe(conn.dest(this.config.packageFtp.baseDir))
-                .pipe(gulpif(this.config.packageFtp.baseDirBC, conn.dest(this.config.packageFtp.baseDirBC)));
+                .pipe(conn.newerOrDifferentSize(ftpDir)) // only upload newer files
+                .pipe(conn.dest(ftpDir))
         }
         else if (done) done();
+    }
+
+    deployPack2Dp(done){
+        return this._deployPack2Dp(done, this.config.packageFtp.baseDir);  
+    }
+
+    // Backward compatibility
+    deployPack2DpBC(done){
+        return this._deployPack2Dp(done, this.config.packageFtp.baseDirBC);  
     }
     
 
@@ -85,19 +101,29 @@ class DpWf {
         else if (done) done();
     }
 
+    notifyDeployPack2Dp(done) {
+        return this._notifyDeployPack2Dp(done, this.config.packageFtp.baseDir);  
+    }
+
+    notifyDeployPack2DpBC(done) {
+        return this._notifyDeployPack2Dp(done, this.config.packageFtp.baseDirBC);  
+    }
+
+    _notifyDeployPack2Dp(done, ftpDir) {
+        if (ftpDir){
+            notifier.notify({
+                title: '✅  DISTRIBUTION PACKAGE WAS DEPLOYED TO FTP',
+                message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.packageFtp.host, ftpDir),
+                icon: path.joinSafe(__dirname, dpLogo)
+            });
+        }
+        if (done) done();
+    }
+
     notifyDeploy2Ftp(done) {
         notifier.notify({
             title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
             message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDir),
-            icon: path.joinSafe(__dirname, dpLogo)
-        });
-        if (done) done();
-    }
-
-    notifyDeployPack2Dp(done) {
-        notifier.notify({
-            title: '✅  DISTRIBUTION PACKAGE WAS DEPLOYED TO FTP',
-            message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.packageFtp.host, this.config.packageFtp.baseDir),
             icon: path.joinSafe(__dirname, dpLogo)
         });
         if (done) done();
