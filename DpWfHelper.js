@@ -102,10 +102,10 @@ module.exports.getComposerAutoloadData = (moduleDir) => {
 module.exports.setComposerAutoloadData = (vendorPath, moduleName, oldNamespace, newNamespace, newPath) => {
     const composerJsonPath = path.joinSafe(vendorPath, 'composer', 'installed.json');
     const composerJson = require( composerJsonPath );
-    if (composerJson)
+    if (composerJson && composerJson.packages)
     {
         fs.outputJSONSync(composerJsonPath + '.bkp', composerJson, { spaces: 4 });
-        for (const moduleCfg of composerJson)
+        for (const moduleCfg of composerJson.packages)
         {
             if (moduleCfg.name === moduleName){
                 if (!moduleCfg.autoload) moduleCfg.autoload = {};    
