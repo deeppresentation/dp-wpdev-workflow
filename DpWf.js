@@ -12,7 +12,7 @@ const dpLogo = 'DP-logo.png';
 const cleanDest = require('gulp-clean-dest');
 const merge = require('merge-stream');
 const replace = require('gulp-batch-replace');
-const gulpif = require('gulp-if');
+
 
 
 const SELF_ROOT_DIR = "dp-wpdev-workflow";
