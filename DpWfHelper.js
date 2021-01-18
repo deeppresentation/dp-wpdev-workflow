@@ -380,6 +380,8 @@ function generateWpPluginInfoHeadrData(version) {
 * Plugin URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
 * Description:       ${module.exports.getSubItemPerBuild('product', 'desc')}
 * Version:           ${version}
+* Requires at least: ${module.exports.getSubItemPerBuild('product', 'requiresVersionWP')}
+* Requires PHP:      ${module.exports.getSubItemPerBuild('product', 'requiresVersionPHP')}
 * Author:            ${dpwf.author.name}
 * Author URI:        ${dpwf.author.uri}
 * License:           ${module.exports.getSubItemPerBuild('license', 'type')}
