@@ -10,13 +10,18 @@ const snakeCase = require('snake-case').snakeCase;
 
 module.exports.getPackageFiles = function () {
 
+    var res = dpwf.package.files;
     if (dpwf.package[`files${dpwf.buildType}`]) {
-        return [
+        res = [
             ...dpwf.package.files,
             ...(dpwf.package[`files${dpwf.buildType}`]),
         ];
     }
-    else return dpwf.package.files;
+    if (dpwf.forceDebug) res = [
+        ...res,
+        'dbg/**/*'
+    ];
+    return res;
 }
 
 module.exports.getPackageFilesAllBuilds = function () {
@@ -27,6 +32,10 @@ module.exports.getPackageFilesAllBuilds = function () {
             files = files.concat(dpwf.package[key]);
         }
     });
+    if (dpwf.forceDebug) files = [
+        ...files,
+        'dbg/**/*'
+    ];
     return files;
 }
 
@@ -130,6 +139,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
         fileLoader,
         // eslint-disable-next-line import/no-extraneous-dependencies
     } = require('@wpackio/scripts');
+    isDev = isDev || dpwf.forceDebug;
     var disableSourceMaps = false;
     if (!isDev){
         disableSourceMaps = !dpwf.forceDebug && module.exports.getSubItemPerBuild('product', 'sourceMapsDisable', false);
