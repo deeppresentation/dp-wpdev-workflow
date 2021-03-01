@@ -219,6 +219,7 @@ define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('produc
 define('${definePrefix}_DP_DEBUG_EN', ${debugEn || dpwf.forceDebug});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
+define('${definePrefix}_PREFIX', '${ definePrefix.toLocaleLowerCase() }');
 `;
 
     
