@@ -236,6 +236,7 @@ define('${definePrefix}_PREFIX', '${ definePrefix.toLocaleLowerCase() }');
         var overrideValAsEmpty = dpwf.buildType === 'PRO' && buildType === 'FREE';
         res += getDefineInBuildType(definePrefix, 'product', 'link', true, overrideValAsEmpty, buildType);
         res += getDefineInBuildType(definePrefix, 'product', 'featuresLink', true, overrideValAsEmpty, buildType);
+        res += getDefineInBuildType(definePrefix, 'product', 'demoLink', true, overrideValAsEmpty, buildType);
         res += getDefineInBuildType(definePrefix, 'product', 'keyBuyLink', true, overrideValAsEmpty, buildType );
         res += getDefineInBuildType(definePrefix, 'product', 'askForRatingLink', true, overrideValAsEmpty, buildType);
         res += getDefineInBuildType(definePrefix, 'product', 'ratingFeedbackLink', true, overrideValAsEmpty, buildType);
