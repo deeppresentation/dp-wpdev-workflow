@@ -473,6 +473,7 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
     }
     
     var adminator = module.exports.getSubItemPerBuild('product', 'adminator');
+    if (dpwf.forceDebug) term.yellow(`DEBUG BUILD IS FORCED\n`);
     term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}${adminator ? ' License type: ' + adminator : ''}\n`);
 
     const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
