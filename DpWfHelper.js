@@ -32,7 +32,7 @@ module.exports.getPackageFilesAllBuilds = function () {
             files = files.concat(dpwf.package[key]);
         }
     });
-    if (dpwf.forceDebug) files = [
+    if (dpwf.forceAdminDebug) files = [
         ...files,
         'dbg/**/*'
     ];
@@ -217,6 +217,7 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
 define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('product', 'adminator')}');
 define('${definePrefix}_DP_DEBUG_EN', ${debugEn || dpwf.forceDebug});
+define('${definePrefix}_DP_ADMIN_DEBUG_EN', ${debugEn || dpwf.forceAdminDebug});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 define('${definePrefix}_PREFIX', '${ definePrefix.toLocaleLowerCase() }');
@@ -474,6 +475,8 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
     
     var adminator = module.exports.getSubItemPerBuild('product', 'adminator');
     if (dpwf.forceDebug) term.yellow(`DEBUG BUILD IS FORCED\n`);
+    if (dpwf.forceAdminDebug) term.magenta(`ADMIN DEBUG BUILD IS FORCED\n`);
+
     term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}${adminator ? ' License type: ' + adminator : ''}\n`);
 
     const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
