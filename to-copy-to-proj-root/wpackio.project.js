@@ -45,9 +45,6 @@ module.exports = {
 	},
 	// Webpack Aliases
 	// <https://webpack.js.org/configuration/resolve/#resolve-alias>
-	alias: {
-        'react-dom': '@hot-loader/react-dom',
-    },
 	// Show overlay on development
 	errorOverlay: true,
 	// Auto optimization by webpack

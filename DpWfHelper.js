@@ -146,11 +146,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
     }
     const customRules = {
         devtool: disableSourceMaps ? false : 'source-map',
-        resolve: {
-            alias: {
-              'react-dom': '@hot-loader/react-dom'
-            }
-          },
+
         module: {
             
             rules: [
