@@ -21,11 +21,6 @@ module.exports = {
 
 	// Files we need to compile, and where to put
 	files: dpWfHelper.getEntryAssetFiles(),
-    // Hook into babeloverride so that we can add react-hot-loader plugin
-	jsBabelOverride: defaults => ({
-		...defaults,
-		plugins: dpwf.hasReact ? ['react-hot-loader/babel'] : [],
-	}),
 	// Output path relative to the context directory
 	// We need relative path here, else, we can not map to publicPath
 	outputPath: dpwf.assets.dir,

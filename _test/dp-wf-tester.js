@@ -1,8 +1,9 @@
 
 const npmRunScript = require('npm-run-script');
-//const dpWfHelper = require('./dp-wpdev-workflow/DpWfHelper');
+const dpWfHelper = require('../DpWfHelper');
 
-
+npmRunScript('./../dp-start.js');
+//dpWfHelper.writeBuildTypePhp(true);
 //dpWfHelper.writeBuildTypePhp();
 
 

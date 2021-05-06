@@ -4,8 +4,8 @@ const gulp = require( 'gulp' );
 
 new DpWf(dpwfconfig);
 
-//exports.default = gulp.series('PREFIX_PHP_MODULES');
-exports.default = gulp.series('DEPLOY_2_DP'); //
+exports.default = gulp.series('PREFIX_PHP_MODULES');
+//exports.default = gulp.series('DEPLOY_2_DP'); //
 
 // DEPLOY
 exports.clearftp = gulp.series('CLEAR_FTP');
