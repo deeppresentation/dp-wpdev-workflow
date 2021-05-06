@@ -1,6 +1,8 @@
 {
     "id": "${id}",
     "type": "plugin",
+    "forceDebug": false,
+    "forceAdminDebug": false,
     "author": {
         "name": "Tomáš Groulík <deeppresentation>",
         "nick": "deeppresentation",
@@ -47,7 +49,9 @@
             "link": "",
             "desc": "${description}",
             "askForRatingLink": "",
-            "ratingFeedbackLink": ""
+            "ratingFeedbackLink": "",
+            "requiresVersionWP": "5.2",
+            "requiresVersionPHP": "7.2"
         },
         "PRO": {
             "title": "${title} PRO",
@@ -55,8 +59,12 @@
             "link": "",
             "desc": "${description}",
             "askForRatingLink": "",
+            "sourceMapsDisable": true,
             "ratingFeedbackLink": "",
+            "packageId": "${id}-pro",
             "adminator": "DEEP_PRESENTATION",
+            "requiresVersionWP": "5.2",
+            "requiresVersionPHP": "7.2",
             "DEEP_PRESENTATION": {
                 "keyBuyLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/",
                 "askForRatingLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/#reviews",
@@ -110,6 +118,7 @@
     "watch": [
         "includes/**/*.php",
         "public/**/*.php",
+        "PRO/**/*.php",
         "admin/**/*.php",
         "*.php"
     ],
@@ -136,13 +145,20 @@
             "*.css",
             "readme.txt"
         ],
-        "filesFREE": [],
-        "filesPRO": []
+        "filesFREE": [
+            "dist/**/*.map"
+        ],
+        "filesPRO": [
+            "dist/**/*.map",
+            "PRO/**/*.php",
+            "plugin-update-checker/**/*"
+        ]
     },
     "server": {
-        "proxy": "localhost",
+        "proxy": "localhost/",
         "browserAutoOpen": false,
-        "browserSyncNotify": false
+        "browserSyncNotify": false,
+        "disableGhostMode": false
     },
     "ftp": {
         "host": "",
@@ -156,6 +172,7 @@
         "user": "w239725",
         "password": "8RrWdxEQJv#AoV9YGpZ7",
         "parallel": 10,
-        "baseDir": "www/domains/update.deeppresentation.com/wp-update-server/packages"
+        "baseDir": "www/domains/update.deeppresentation.com/packages",
+        "baseDirBC": "www/domains/deeppresentation.com/wp-update-server/packages"
     }
 }
