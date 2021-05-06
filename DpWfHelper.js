@@ -212,8 +212,8 @@ module.exports.writeBuildTypePhp = function (debugEn = false) {
     var res = `<?php 
 define('${definePrefix}_DP_BUILD_TYPE', '${dpwf.buildType}');
 define('${definePrefix}_ADMINATOR', '${module.exports.getSubItemPerBuild('product', 'adminator')}');
-define('${definePrefix}_DP_DEBUG_EN', ${debugEn || dpwf.forceDebug});
-define('${definePrefix}_DP_ADMIN_DEBUG_EN', ${debugEn || dpwf.forceAdminDebug});
+define('${definePrefix}_DP_DEBUG_EN', ${Boolean(debugEn || dpwf.forceDebug)});
+define('${definePrefix}_DP_ADMIN_DEBUG_EN', ${Boolean(debugEn || dpwf.forceAdminDebug)});
 define('${definePrefix}_VERSION', '${module.exports.getSubItemPerBuild('product', 'version')}');
 define('${definePrefix}_NAME', '${module.exports.getTitle()}');
 define('${definePrefix}_PREFIX', '${ definePrefix.toLocaleLowerCase() }');
