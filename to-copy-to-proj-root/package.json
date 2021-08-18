@@ -5,7 +5,14 @@
     "devDependencies": {
         "@svgr/webpack": "^5.5.0",
         "@wpackio/scripts": "^5.0.0",
+        "babel-eslint": "^10.1.0",
         "del": "^5.1.0",
+        "eslint": "^7.32.0",
+        "eslint-config-airbnb": "^18.2.1",
+        "eslint-plugin-import": "^2.24.0",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-react": "^7.24.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
         "fs-extra": "^8.1.0",
         "gulp": "^4.0.2",
         "gulp-batch-replace": "0.0.0",
@@ -41,7 +48,9 @@
         "pullself": "gulp pullself",
         "pulldp": "gulp pulldp",
         "pushdp": "gulp pushdp",
-        "prefix": "gulp prefix"
+        "prefix": "gulp prefix",
+        "lint": "eslint --format codeframe --ext mjs,jsx,js **/assets/js",
+        "lint-fix": "eslint --format codeframe --ext mjs,jsx,js **/assets/js --fix"
     },
     "dependencies": {
         "@hot-loader/react-dom": "^17.0.0-rc.2",
