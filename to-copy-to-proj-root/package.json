@@ -8,7 +8,6 @@
         "babel-eslint": "^10.1.0",
         "del": "^5.1.0",
         "eslint": "^7.32.0",
-        "eslint-config-airbnb": "^18.2.1",
         "eslint-plugin-import": "^2.24.0",
         "eslint-plugin-jsx-a11y": "^6.4.1",
         "eslint-plugin-react": "^7.24.0",
@@ -49,8 +48,11 @@
         "pulldp": "gulp pulldp",
         "pushdp": "gulp pushdp",
         "prefix": "gulp prefix",
-        "lint": "eslint --format codeframe --ext mjs,jsx,js **/assets/js",
-        "lint-fix": "eslint --format codeframe --ext mjs,jsx,js **/assets/js --fix"
+        "js-lint": "eslint --format codeframe --ext mjs,jsx,js **/assets/js",
+        "js-lint-fix": "eslint --format codeframe --ext mjs,jsx,js **/assets/js --fix",
+        "php-lint": "phpcs --standard=Wordpress-Custom -n --ignore=./vendor,./node_modules,./build_tools,./_archive,./dp-wpdev-workflow,./dist,./package,./plugin-update-checker,./analyst --extensions=php ./",
+        "php-lint-sum": "phpcs --standard=Wordpress-Custom --ignore=./vendor,./node_modules,./build_tools,./_archive,./dp-wpdev-workflow,./dist,./package,./plugin-update-checker,./analyst --extensions=php ./ --report=summary",
+        "php-lint-fix": "phpcbf --standard=Wordpress-Custom --ignore=./vendor,./node_modules,./build_tools,./_archive,./dp-wpdev-workflow,./dist,./package,./plugin-update-checker,./analyst --extensions=php ./"
     },
     "dependencies": {
         "@hot-loader/react-dom": "^17.0.0-rc.2",
