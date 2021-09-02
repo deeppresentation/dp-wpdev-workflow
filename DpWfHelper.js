@@ -337,6 +337,10 @@ module.exports.getPackageId = function () {
 	return packageId ? packageId : dpwf.id;
 };
 
+module.exports.getTextDomain = function () {
+	return dpwf.id;
+};
+
 module.exports.actualizeReadmePerBuildTypeBeforePack = function () {
 	const buildSpecReadMeNamePath = `./readme-${dpwf.buildType}.txt`;
 	if (fs.existsSync(buildSpecReadMeNamePath)) {
@@ -389,7 +393,7 @@ function generateWpPluginInfoHeadrData(version) {
 * Author URI:        ${dpwf.author.uri}
 * License:           ${module.exports.getSubItemPerBuild('license', 'type')}
 * License URI:       ${module.exports.getSubItemPerBuild('license', 'link')}
-* Text Domain:       ${dpwf.id}
+* Text Domain:       ${module.exports.getTextDomain()}
 * Domain Path:       /languages
 */`;
 	return res;
