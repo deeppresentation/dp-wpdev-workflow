@@ -197,6 +197,14 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 				},
 			],
 		},
+		optimization: {
+			splitChunks: {
+				chunks: 'all',
+				automaticNameDelimiter: '-',
+
+			},
+		},
+
 	};
 	// merge and return
 	return merge(config, customRules);
@@ -375,6 +383,16 @@ function updatePackageJson(id, version, buildType) {
 function generateWpPluginInfoHeadrData(version) {
 	var pluginName = module.exports.getTitle();
 
+	var typeLabel = 'Plugin';
+	var template = '';
+	if (dpwf.type === 'theme') {
+		typeLabel = 'Theme';
+		if (dpwf.childTheme) {
+			template = (
+				`
+* Template:          ${dpwf.childTheme}`);
+		}
+	}
 
 	var res = `/*
 *
@@ -383,14 +401,14 @@ function generateWpPluginInfoHeadrData(version) {
 * @package           ${replaceString(pluginName, ' ', '_')}
 *
 * @wordpress-plugin
-* Plugin Name:       ${pluginName}
-* Plugin URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
+* ${typeLabel} Name:       ${pluginName}
+* ${typeLabel} Plugin URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
 * Description:       ${module.exports.getSubItemPerBuild('product', 'desc')}
 * Version:           ${version}
 * Requires at least: ${module.exports.getSubItemPerBuild('product', 'requiresVersionWP')}
 * Requires PHP:      ${module.exports.getSubItemPerBuild('product', 'requiresVersionPHP')}
 * Author:            ${dpwf.author.name}
-* Author URI:        ${dpwf.author.uri}
+* Author URI:        ${dpwf.author.uri}${template}
 * License:           ${module.exports.getSubItemPerBuild('license', 'type')}
 * License URI:       ${module.exports.getSubItemPerBuild('license', 'link')}
 * Text Domain:       ${module.exports.getTextDomain()}
