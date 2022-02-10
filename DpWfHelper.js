@@ -383,16 +383,6 @@ function updatePackageJson(id, version, buildType) {
 function generateWpPluginInfoHeadrData(version) {
 	var pluginName = module.exports.getTitle();
 
-	var typeLabel = 'Plugin';
-	var template = '';
-	if (dpwf.type === 'theme') {
-		typeLabel = 'Theme';
-		if (dpwf.childTheme) {
-			template = (
-				`
-* Template:          ${dpwf.childTheme}`);
-		}
-	}
 
 	var res = `/*
 *
@@ -401,14 +391,14 @@ function generateWpPluginInfoHeadrData(version) {
 * @package           ${replaceString(pluginName, ' ', '_')}
 *
 * @wordpress-plugin
-* ${typeLabel} Name:       ${pluginName}
-* ${typeLabel} Plugin URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
+* Plugin Name:       ${pluginName}
+* Plugin URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
 * Description:       ${module.exports.getSubItemPerBuild('product', 'desc')}
 * Version:           ${version}
 * Requires at least: ${module.exports.getSubItemPerBuild('product', 'requiresVersionWP')}
 * Requires PHP:      ${module.exports.getSubItemPerBuild('product', 'requiresVersionPHP')}
 * Author:            ${dpwf.author.name}
-* Author URI:        ${dpwf.author.uri}${template}
+* Author URI:        ${dpwf.author.uri}
 * License:           ${module.exports.getSubItemPerBuild('license', 'type')}
 * License URI:       ${module.exports.getSubItemPerBuild('license', 'link')}
 * Text Domain:       ${module.exports.getTextDomain()}
@@ -417,8 +407,30 @@ function generateWpPluginInfoHeadrData(version) {
 	return res;
 }
 
-module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFile, versionTypeToIncrement = 'build', buildTypeModified = false) {
-	if (srcPhpIndexFile && dstPhpIndexFile) {
+function generateWpThemeInfoHeadrData(version) {
+	var name = module.exports.getTitle();
+
+	var res = `/*
+
+Theme Name:       ${name}
+Theme URI:        ${module.exports.getSubItemPerBuild('product', 'link')}
+Description:       ${module.exports.getSubItemPerBuild('product', 'desc')}
+Author:            ${dpwf.author.name}
+Author URI:        ${dpwf.author.uri}
+Template: 		   ${dpwf.childTheme ? dpwf.childTheme : dpwf.id}	
+Version:           ${version}
+Requires at least: ${module.exports.getSubItemPerBuild('product', 'requiresVersionWP')}
+Requires PHP:      ${module.exports.getSubItemPerBuild('product', 'requiresVersionPHP')}
+License:           ${module.exports.getSubItemPerBuild('license', 'type')}
+License URI:       ${module.exports.getSubItemPerBuild('license', 'link')}
+Text Domain:       ${module.exports.getTextDomain()}
+*/`;
+	return res;
+}
+
+module.exports.printWpInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFile, versionTypeToIncrement = 'build', buildTypeModified = false) {
+	const isTheme = dpwf.type === 'theme';
+	if (srcPhpIndexFile && dstPhpIndexFile && fs.existsSync(srcPhpIndexFile)) {
 		var data = fs.readFileSync(srcPhpIndexFile);
 		if (data) {
 			var dataStr = data.toString();
@@ -431,7 +443,7 @@ module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFi
 					if (char === '/' && dataStr[idx + 1] === '*') {
 						startIdx = idx;
 					}
-					if (startIdx > 5) //<?php
+					if (isTheme || startIdx > 5) //<?php
 					{
 						if (char == '*' && dataStr[idx + 1] === '/') {
 							stopIdx = idx + 1;
@@ -439,13 +451,15 @@ module.exports.printWpPluginInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFi
 						}
 					}
 				}
-				if (startIdx > 0 && stopIdx > startIdx + 10) {
+				if (startIdx >= 0 && stopIdx > startIdx + 10) {
 					//We localized header
 					var oldInfoHeader = dataStr.substr(startIdx, stopIdx - startIdx + 1);
 					if (oldInfoHeader) {
 						const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
 						const newVersion = module.exports.incrementVersion(oldVersion, versionTypeToIncrement);
-						var newInfoHeader = generateWpPluginInfoHeadrData(newVersion);
+						var newInfoHeader = isTheme
+						  ? generateWpThemeInfoHeadrData(newVersion)
+						  : generateWpPluginInfoHeadrData(newVersion);
 						if (newInfoHeader) {
 							var newDataStr = dataStr.replace(oldInfoHeader, newInfoHeader);
 							if (newDataStr) {
@@ -492,7 +506,7 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
 	term.green(`√ Deep Presentation workflow engine loaded. Build type: ${dpwf.buildType}${adminator ? ' License type: ' + adminator : ''}\n`);
 
 	const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
-	const newVersion = module.exports.printWpPluginInfoHeadr(indexPhpFile, indexPhpFile, versionTypeToIncrement, buildTypeModified);
+	const newVersion = module.exports.printWpInfoHeadr(indexPhpFile, indexPhpFile, versionTypeToIncrement, buildTypeModified);
 
 	if (newVersion) {
 

@@ -2,11 +2,11 @@
 const npmRunScript = require('npm-run-script');
 const dpWfHelper = require('../DpWfHelper');
 
-npmRunScript('./../dp-start.js');
+//npmRunScript('./../dp-start.js');
 //dpWfHelper.writeBuildTypePhp(true);
 //dpWfHelper.writeBuildTypePhp();
 
-
+dpWfHelper.incrementVersionAndAdjustWpInfoHeader();
 //console.log(dpWfHelper.printWpPluginInfoHeadr('./index.php', './indexNew.php', 'm'));
 
 //npmRunScript('wpackio-scripts build');
