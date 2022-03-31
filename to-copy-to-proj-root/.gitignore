@@ -1,0 +1,8 @@
+node_modules
+dist/
+package/
+composer.lock
+package-lock.json
+readme.txt
+vendor
+dp-build-type.php
