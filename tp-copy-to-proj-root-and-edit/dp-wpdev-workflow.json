@@ -1,178 +1,174 @@
 {
-    "id": "${id}",
-    "type": "plugin",
-    "forceDebug": false,
-    "forceAdminDebug": false,
-    "author": {
-        "name": "Tomáš Groulík <deeppresentation>",
-        "nick": "deeppresentation",
-        "uri": "https://deeppresentation.com/",
-        "email": "tomas@deeppresentation.com"
-    },
-    "buildType": "FREE",
-    "hasReact": true,
-    "hasSass": true,
-    "indexPhpFile": "./${id}.php",
-    "wordpressOrgSvnBaseDir": "",
-    "phpScoper": {
-        "scopePrefix": "${scope-prefix}",
-        "modules": [
-            "deeppresentation/php-std",
-            "deeppresentation/wordpress-std",
-            "wpackio/enqueue"
-        ],
-        "dependencies": {
-            "deeppresentation/wordpress-std": [
-                "deeppresentation/php-std"
-            ]
-        }
-    },
-    "tracking": {
-        "FREE": {
-            "enabled": false,
-            "clientId": "",
-            "clientSecret": ""
-        },
-        "PRO": {
-            "DEEP_PRESENTATION": {
-            },
-            "SELL_CODES": {
-            },
-            "CODE_CANYON": {
-            }
-        }
-    },
-    "product": {
-        "FREE": {
-            "title": "${title}",
-            "version": "0.0.0",
-            "link": "",
-            "desc": "${description}",
-            "askForRatingLink": "",
-            "ratingFeedbackLink": "",
-            "requiresVersionWP": "5.2",
-            "requiresVersionPHP": "7.2"
-        },
-        "PRO": {
-            "title": "${title} PRO",
-            "version": "0.0.0",
-            "link": "",
-            "desc": "${description}",
-            "askForRatingLink": "",
-            "sourceMapsDisable": true,
-            "ratingFeedbackLink": "",
-            "packageId": "${id}-pro",
-            "adminator": "DEEP_PRESENTATION",
-            "requiresVersionWP": "5.2",
-            "requiresVersionPHP": "7.2",
-            "DEEP_PRESENTATION": {
-                "keyBuyLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/",
-                "askForRatingLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/#reviews",
-                "adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
-            },
-            "SELL_CODES": {
-                "updateKey": "{selcode-update-key}",
-                "keyBuyLink": "https://sellcodes.com/{selcode-update-key}",
-                "askForRatingLink": "https://sellcodes.com/{selcode-update-key}/#refine",
-                "adminatorEndPoint": "https://sellcodes.com/api/v2/licenses"
-            },
-            "CODE_CANYON": {
-                "link": "",
-                "featuresLink": "",
-                "adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
-            },
-            "TEMPLATE_MONSTER": {
-                "link": "",
-                "featuresLink": ""
-            }
-        }
-    },
-    "license": {
-        "FREE": {
-            "type": "GPL-2.0+",
-            "link": "http://www.gnu.org/licenses/gpl-2.0.txt",
-            "copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpress.org plugin repository"
-        },
-        "PRO": {
-            "type": "",
-            "link": "",
-            "copyrightText": "Copyright (c) 2020 DeepPresentation <Tomáš Groulík>. All rights reserved."
-        }
-    },
-    "assets": {
-        "dir": "dist",
-        "bundles": {
-            "main": {
-                "files": {
-                    "${idCamelCase}Main": "./public/assets/js/${id}-public.js",
-                    "${idCamelCase}MainStyle": "./public/assets/scss/${id}-public.scss",
-                    "${idCamelCase}Admin": "./admin/assets/js/${id}-admin.js",
-                    "${idCamelCase}AdminStyle": "./admin/assets/scss/${id}-admin.scss"
-                },
-                "filesFREE": {
-                },
-                "filesPRO": {}
-            }
-        }
-    },
-    "watch": [
-        "includes/**/*.php",
-        "public/**/*.php",
-        "PRO/**/*.php",
-        "admin/**/*.php",
-        "*.php"
-    ],
-    "package": {
-        "dir": "package",
-        "files": [
-            "dist/**/*.css",
-            "dist/**/*.js",
-            "dist/**/*.json",
-            "dist/**/*.svg",
-            "dist/**/*.png",
-            "includes/**/*.php",
-            "public/**/*.php",
-            "admin/**/*.php",
-            "vendor/deeppresentation/php-std/build/**/*",
-            "vendor/deeppresentation/wordpress-std/build/**/*",
-            "vendor/wpackio/enqueue/build/**/*",
-            "vendor/composer/**/*",
-            "vendor/autoload.php",
-            "*.php",
-            "*.md",
-            "languages/**",
-            "LICENSE",
-            "*.css",
-            "readme.txt"
-        ],
-        "filesFREE": [
-            "dist/**/*.map"
-        ],
-        "filesPRO": [
-            "dist/**/*.map",
-            "PRO/**/*.php",
-            "plugin-update-checker/**/*"
-        ]
-    },
-    "server": {
-        "proxy": "localhost/",
-        "browserAutoOpen": false,
-        "browserSyncNotify": false,
-        "disableGhostMode": false
-    },
-    "ftp": {
-        "host": "",
-        "user": "",
-        "password": "",
-        "parallel": 10,
-        "baseDir": ""
-    },
-    "packageFtp": {
-        "host": "239725.w25.wedos.net",
-        "user": "w239725",
-        "password": "8RrWdxEQJv#AoV9YGpZ7",
-        "parallel": 10,
-        "baseDir": "www/domains/update.deeppresentation.com/packages",
-        "baseDirBC": "www/domains/deeppresentation.com/wp-update-server/packages"
-    }
+	"id": "${id}",
+	"type": "plugin",
+	"forceDebug": false,
+	"forceAdminDebug": false,
+	"author": {
+		"name": "Tomáš Groulík <deeppresentation>",
+		"nick": "deeppresentation",
+		"uri": "https://deeppresentation.com/",
+		"email": "tomas@deeppresentation.com"
+	},
+	"buildType": "FREE",
+	"hasReact": true,
+	"hasSass": true,
+	"indexPhpFile": "./${id}.php",
+	"wordpressOrgSvnBaseDir": "",
+	"phpScoper": {
+		"scopePrefix": "${scope-prefix}",
+		"modules": [
+			"deeppresentation/php-std",
+			"deeppresentation/wordpress-std",
+			"wpackio/enqueue"
+		],
+		"dependencies": {
+			"deeppresentation/wordpress-std": [
+				"deeppresentation/php-std"
+			]
+		}
+	},
+	"tracking": {
+		"FREE": {
+			"enabled": false,
+			"clientId": "",
+			"clientSecret": ""
+		},
+		"PRO": {
+			"DEEP_PRESENTATION": {},
+			"SELL_CODES": {},
+			"CODE_CANYON": {}
+		}
+	},
+	"product": {
+		"FREE": {
+			"title": "${title}",
+			"version": "0.0.0",
+			"link": "",
+			"desc": "${description}",
+			"askForRatingLink": "",
+			"ratingFeedbackLink": "",
+			"requiresVersionWP": "5.2",
+			"requiresVersionPHP": "7.2"
+		},
+		"PRO": {
+			"title": "${title} PRO",
+			"version": "0.0.0",
+			"link": "",
+			"desc": "${description}",
+			"askForRatingLink": "",
+			"sourceMapsDisable": true,
+			"ratingFeedbackLink": "",
+			"packageId": "${id}-pro",
+			"adminator": "DEEP_PRESENTATION",
+			"requiresVersionWP": "5.2",
+			"requiresVersionPHP": "7.2",
+			"DEEP_PRESENTATION": {
+				"keyBuyLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/",
+				"askForRatingLink": "https://deeppresentation.com/product/${id}-pro-plugin-for-wordpress/#reviews",
+				"adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
+			},
+			"SELL_CODES": {
+				"updateKey": "{selcode-update-key}",
+				"keyBuyLink": "https://sellcodes.com/{selcode-update-key}",
+				"askForRatingLink": "https://sellcodes.com/{selcode-update-key}/#refine",
+				"adminatorEndPoint": "https://sellcodes.com/api/v2/licenses"
+			},
+			"CODE_CANYON": {
+				"link": "",
+				"featuresLink": "",
+				"adminatorEndPoint": "https://deeppresentation.com/wp-json/lmfwc/v2/licenses/"
+			},
+			"TEMPLATE_MONSTER": {
+				"link": "",
+				"featuresLink": ""
+			}
+		}
+	},
+	"license": {
+		"FREE": {
+			"type": "GPL-2.0+",
+			"link": "http://www.gnu.org/licenses/gpl-2.0.txt",
+			"copyrightText": "This plugin is released under GPL-2.0+ licence to be included in wordpress.org plugin repository"
+		},
+		"PRO": {
+			"type": "",
+			"link": "",
+			"copyrightText": "Copyright (c) 2020 DeepPresentation <Tomáš Groulík>. All rights reserved."
+		}
+	},
+	"assets": {
+		"dir": "dist",
+		"bundles": {
+			"main": {
+				"files": {
+					"${idCamelCase}Main": "./public/assets/js/${id}-public.js",
+					"${idCamelCase}MainStyle": "./public/assets/scss/${id}-public.scss",
+					"${idCamelCase}Admin": "./admin/assets/js/${id}-admin.js",
+					"${idCamelCase}AdminStyle": "./admin/assets/scss/${id}-admin.scss"
+				},
+				"filesFREE": {},
+				"filesPRO": {}
+			}
+		}
+	},
+	"watch": [
+		"includes/**/*.php",
+		"public/**/*.php",
+		"PRO/**/*.php",
+		"admin/**/*.php",
+		"*.php"
+	],
+	"package": {
+		"dir": "package",
+		"files": [
+			"dist/**/*.css",
+			"dist/**/*.js",
+			"dist/**/*.json",
+			"dist/**/*.svg",
+			"dist/**/*.png",
+			"includes/**/*.php",
+			"public/**/*.php",
+			"admin/**/*.php",
+			"vendor/deeppresentation/php-std/build/**/*",
+			"vendor/deeppresentation/wordpress-std/build/**/*",
+			"vendor/wpackio/enqueue/build/**/*",
+			"vendor/composer/**/*",
+			"vendor/autoload.php",
+			"*.php",
+			"*.md",
+			"languages/**",
+			"LICENSE",
+			"*.css",
+			"readme.txt"
+		],
+		"filesFREE": [
+			"dist/**/*.map"
+		],
+		"filesPRO": [
+			"dist/**/*.map",
+			"PRO/**/*.php",
+			"plugin-update-checker/**/*"
+		]
+	},
+	"server": {
+		"proxy": "localhost/",
+		"browserAutoOpen": false,
+		"browserSyncNotify": false,
+		"disableGhostMode": false
+	},
+	"ftp": {
+		"host": "",
+		"user": "",
+		"password": "",
+		"parallel": 10,
+		"baseDir": ""
+	},
+	"packageFtp": {
+		"host": "deeppresentation.com.uvirt115.active24.cz",
+		"user": "deeppresen",
+		"password": "4TJMbcrkQe",
+		"parallel": 10,
+		"baseDir": "www/domains/update.deeppresentation.com/packages",
+		"baseDirBC": "www/domains/deeppresentation.com/wp-update-server/packages"
+	}
 }
