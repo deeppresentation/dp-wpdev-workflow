@@ -12,7 +12,7 @@ const dpLogo = 'DP-logo.png';
 const cleanDest = require('gulp-clean-dest');
 const merge = require('merge-stream');
 const replace = require('gulp-batch-replace');
-
+const run = require('gulp-run');
 
 
 const SELF_ROOT_DIR = 'dp-wpdev-workflow';
@@ -35,7 +35,7 @@ class DpWf {
 		// DEPLOY
 		gulp.task('CLEAR_FTP', this.clearFTP.bind(this));
 		gulp.task('DEPLOY_2_GIT', gulp.series(this.deploy2Git.bind(this)));
-		gulp.task('DEPLOY_2_FTP', gulp.series(this.deploy2Ftp.bind(this), this.notifyDeploy2Ftp.bind(this)));
+		gulp.task('DEPLOY_2_FTP', gulp.series(this._runBuild, this._runPack, this.deploy2Ftp.bind(this), this.notifyDeploy2Ftp.bind(this)));
 		gulp.task('DEPLOY_2_DP', gulp.series(
 			this.deployPack2Dp.bind(this),
 			this.notifyDeployPack2Dp.bind(this),
@@ -49,6 +49,15 @@ class DpWf {
 		gulp.task('PUSH_DP_MODULES', this.pushComposerDPModules.bind(this));
 		gulp.task('PULL_DP_MODULES', gulp.series(this.updateComposerDPModules.bind(this), 'PREFIX_PHP_MODULES'));
 
+	}
+
+
+	_runBuild() {
+		return run('node dp-wpdev-workflow/dp-build b').exec();    // run "npm start". 
+	}
+
+	_runPack() {
+		return run('node dp-wpdev-workflow/dp-pack').exec();    // run "npm start". 
 	}
 
 	_getPackageFilesAllBuilds(root) {
