@@ -157,11 +157,11 @@
 		"disableGhostMode": false
 	},
 	"ftp": {
-		"host": "",
-		"user": "",
-		"password": "",
+		"host": "deeppresentation.com.uvirt115.active24.cz",
+		"user": "deeppresen",
+		"password": "4TJMbcrkQe",
 		"parallel": 10,
-		"baseDir": ""
+		"baseDir": "www/domains/deeppresentation.com/wp-content/plugins"
 	},
 	"packageFtp": {
 		"host": "deeppresentation.com.uvirt115.active24.cz",
