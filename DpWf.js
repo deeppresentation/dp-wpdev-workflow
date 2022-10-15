@@ -102,10 +102,11 @@ class DpWf {
 	deploy2Ftp(done) {
 
 		if (this.config.ftp) {
+			var ftpPath = path.joinSafe(this.config.ftp.baseDir, dpWfHelper.getPackageId());
 			var conn = ftp.create(this.config.ftp);
 			return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId(), '**'), { base: path.joinSafe('.', this.config.package.dir, dpWfHelper.getPackageId()), buffer: false })
-				.pipe(conn.newerOrDifferentSize(this.config.ftp.baseDir)) // only upload newer files
-				.pipe(conn.dest(this.config.ftp.baseDir));
+				.pipe(conn.newerOrDifferentSize(ftpPath)) // only upload newer files
+				.pipe(conn.dest(ftpPath));
 		}
 		else if (done) done();
 	}
