@@ -4,7 +4,7 @@ const dpwfHelper = require('./DpWfHelper');
 var versionTypeToIncrement = 'b';
 //var a = dpwfHelper.writeBuildTypePhp();
 
-
+// tady to tu nebylo
 
 
 dpwfHelper.setActualScriptType('build');
