@@ -161,7 +161,8 @@
 		"user": "deeppresen",
 		"password": "4TJMbcrkQe",
 		"parallel": 10,
-		"baseDir": "www/domains/deeppresentation.com/wp-content/plugins"
+		"baseDir": "www/domains/dev.deeppresentation.com/wp-content/plugins",
+		"baseDirProd": "www/domains/deeppresentation.com/wp-content/plugins"
 	},
 	"packageFtp": {
 		"host": "deeppresentation.com.uvirt115.active24.cz",
