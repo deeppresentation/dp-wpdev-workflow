@@ -1,18 +1,21 @@
 const DpWf = require('./dp-wpdev-workflow/DpWf');
 const dpwfconfig = require('./dp-wpdev-workflow.json');
-const gulp = require( 'gulp' ); 
+const gulp = require('gulp');
 
 new DpWf(dpwfconfig);
 
 exports.default = gulp.series('PREFIX_PHP_MODULES');
-//exports.default = gulp.series('DEPLOY_2_DP'); //
+//exports.default = gulp.series('DEPLOY_2_FTP'); //
 
 // DEPLOY
 exports.clearftp = gulp.series('CLEAR_FTP');
 exports.deploy2git = gulp.series('DEPLOY_2_GIT');
 exports.deploy2ftp = gulp.series('DEPLOY_2_FTP');
+exports.deploy2dev = gulp.series('DEPLOY_2_FTP');
+exports.deploy2prod = gulp.series('DEPLOY_2_FTP_PROD');
+
 exports.deploy2dp = gulp.series('DEPLOY_2_DP');
-exports.deploy2wp =  gulp.series('DEPLOY_2_WP_ORG');
+exports.deploy2wp = gulp.series('DEPLOY_2_WP_ORG');
 
 // DP DEV
 exports.prefix = gulp.series('PREFIX_PHP_MODULES');

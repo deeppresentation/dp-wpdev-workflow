@@ -35,7 +35,8 @@ class DpWf {
 		// DEPLOY
 		gulp.task('CLEAR_FTP', this.clearFTP.bind(this));
 		gulp.task('DEPLOY_2_GIT', gulp.series(this.deploy2Git.bind(this)));
-		gulp.task('DEPLOY_2_FTP', gulp.series(this._runBuild, this._runPack, this.deploy2Ftp.bind(this), this.notifyDeploy2Ftp.bind(this)));
+		gulp.task('DEPLOY_2_FTP', gulp.series(this._runBuild, this._runPack, this.deploy2Dev.bind(this), this.notifyDeploy2FtpDev.bind(this)));
+		gulp.task('DEPLOY_2_FTP_PROD', gulp.series(this._runBuild, this._runPack, this.deploy2Prod.bind(this), this.notifyDeploy2FtpProd.bind(this)));
 		gulp.task('DEPLOY_2_DP', gulp.series(
 			this.deployPack2Dp.bind(this),
 			this.notifyDeployPack2Dp.bind(this),
@@ -99,16 +100,44 @@ class DpWf {
 	}
 
 
-	deploy2Ftp(done) {
+	deploy2Dev(done) {
+		return this.deploy2Ftp(this.config.ftp.baseDir, done);
+	}
+
+	deploy2Prod(done) {
+		return this.deploy2Ftp(this.config.ftp.baseDirProd, done);
+	}
+
+	deploy2Ftp(baseDir, done) {
 
 		if (this.config.ftp) {
-			var ftpPath = path.joinSafe(this.config.ftp.baseDir, dpWfHelper.getPackageId());
+			var ftpPath = path.joinSafe(baseDir, dpWfHelper.getPackageId());
 			var conn = ftp.create(this.config.ftp);
 			return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId(), '**'), { base: path.joinSafe('.', this.config.package.dir, dpWfHelper.getPackageId()), buffer: false })
 				.pipe(conn.newerOrDifferentSize(ftpPath)) // only upload newer files
 				.pipe(conn.dest(ftpPath));
 		}
 		else if (done) done();
+	}
+
+
+	notifyDeploy2FtpDev(done) {
+		this.notifyDeploy2Ftp(done, this.config.ftp.baseDir);
+	}
+
+
+	notifyDeploy2FtpProd(done) {
+		this.notifyDeploy2Ftp(done, this.config.ftp.baseDirProd);
+	}
+
+
+	notifyDeploy2Ftp(done, baseDir) {
+		notifier.notify({
+			title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
+			message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, baseDir),
+			icon: path.joinSafe(__dirname, dpLogo)
+		});
+		if (done) done();
 	}
 
 	notifyDeployPack2Dp(done) {
@@ -130,14 +159,6 @@ class DpWf {
 		if (done) done();
 	}
 
-	notifyDeploy2Ftp(done) {
-		notifier.notify({
-			title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
-			message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, this.config.ftp.baseDir),
-			icon: path.joinSafe(__dirname, dpLogo)
-		});
-		if (done) done();
-	}
 
 	deploy2Git(done) {
 

@@ -1,10 +1,9 @@
 const npmRunScript = require('npm-run-script');
 const dpwfHelper = require('./DpWfHelper');
 
-var versionTypeToIncrement = 'n';
+var versionTypeToIncrement = 'b';
 //var a = dpwfHelper.writeBuildTypePhp();
-var a = dpwfHelper.getTitle();
-var b = a;
+
 
 
 
