@@ -37,12 +37,21 @@ class DpWf {
 		gulp.task('DEPLOY_2_GIT', gulp.series(this.deploy2Git.bind(this)));
 		gulp.task('DEPLOY_2_FTP', gulp.series(this._runBuild, this._runPack, this.deploy2Dev.bind(this), this.notifyDeploy2FtpDev.bind(this)));
 		gulp.task('DEPLOY_2_FTP_PROD', gulp.series(this._runBuild, this._runPack, this.deploy2Prod.bind(this), this.notifyDeploy2FtpProd.bind(this)));
+		gulp.task('DEPLOY_2_FTP_ALL', gulp.series(
+			this._runBuild,
+			this._runPack,
+			this.deploy2Dev.bind(this),
+			this.notifyDeploy2FtpDev.bind(this),
+			this.deploy2Prod.bind(this),
+			this.notifyDeploy2FtpProd.bind(this))
+		);
 		gulp.task('DEPLOY_2_DP', gulp.series(
 			this.deployPack2Dp.bind(this),
 			this.notifyDeployPack2Dp.bind(this),
 			this.deployPack2DpBC.bind(this),
 			this.notifyDeployPack2DpBC.bind(this)
 		));
+
 		gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deploy2WordpressOrg.bind(this)));
 
 		gulp.task('PREFIX_PHP_MODULES', gulp.series(this.prefixPhpModules.bind(this), this.dumpAutoload.bind(this)));

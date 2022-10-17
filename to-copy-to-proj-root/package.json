@@ -41,6 +41,7 @@
         "deploy2ftp": "gulp deploy2dev",
         "deploy2dev": "gulp deploy2dev",
         "deploy2prod": "gulp deploy2prod",
+        "deploy2all": "gulp deploy2all",
         "clearftp": "gulp clearftp",
         "pulldpm": "gulp pulldpm",
         "pushdpm": "gulp pushdpm",

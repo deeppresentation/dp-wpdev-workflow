@@ -13,6 +13,8 @@ exports.deploy2git = gulp.series('DEPLOY_2_GIT');
 exports.deploy2ftp = gulp.series('DEPLOY_2_FTP');
 exports.deploy2dev = gulp.series('DEPLOY_2_FTP');
 exports.deploy2prod = gulp.series('DEPLOY_2_FTP_PROD');
+exports.deploy2all = gulp.series('DEPLOY_2_FTP_ALL');
+
 
 exports.deploy2dp = gulp.series('DEPLOY_2_DP');
 exports.deploy2wp = gulp.series('DEPLOY_2_WP_ORG');
