@@ -131,18 +131,18 @@ class DpWf {
 
 
 	notifyDeploy2FtpDev(done) {
-		this.notifyDeploy2Ftp(done, this.config.ftp.baseDir);
+		this.notifyDeploy2Ftp(done, this.config.ftp.baseDir, 'DEV');
 	}
 
 
 	notifyDeploy2FtpProd(done) {
-		this.notifyDeploy2Ftp(done, this.config.ftp.baseDirProd);
+		this.notifyDeploy2Ftp(done, this.config.ftp.baseDirProd, 'PRODUCTION');
 	}
 
 
-	notifyDeploy2Ftp(done, baseDir) {
+	notifyDeploy2Ftp(done, baseDir, labelOverride = 'FTP') {
 		notifier.notify({
-			title: '✅  DISTRIBUTION WAS DEPLOYED TO FTP',
+			title: '✅  DISTRIBUTION WAS DEPLOYED TO ' + labelOverride,
 			message: 'Distribution of ' + dpWfHelper.getPackageId() + ' has been deployed into ftp: ' + path.joinSafe(this.config.ftp.host, baseDir),
 			icon: path.joinSafe(__dirname, dpLogo)
 		});

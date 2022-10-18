@@ -118,6 +118,7 @@ class SelfUpdater {
 						return;
 					}
 					this.pullGitModule(modules, idx, done);
+					return; // just try avoid freeze of tasks
 				});
 		}
 		else if (done) done();
