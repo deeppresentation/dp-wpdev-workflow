@@ -458,8 +458,8 @@ module.exports.printWpInfoHeadr = function (srcPhpIndexFile, dstPhpIndexFile, ve
 						const oldVersion = module.exports.getSubItemPerBuild('product', 'version');
 						const newVersion = module.exports.incrementVersion(oldVersion, versionTypeToIncrement);
 						var newInfoHeader = isTheme
-						  ? generateWpThemeInfoHeadrData(newVersion)
-						  : generateWpPluginInfoHeadrData(newVersion);
+							? generateWpThemeInfoHeadrData(newVersion)
+							: generateWpPluginInfoHeadrData(newVersion);
 						if (newInfoHeader) {
 							var newDataStr = dataStr.replace(oldInfoHeader, newInfoHeader);
 							if (newDataStr) {
