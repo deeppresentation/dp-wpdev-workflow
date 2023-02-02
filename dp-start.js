@@ -8,6 +8,20 @@ if (process.argv[2]) buildTypeModifier = process.argv[2].toUpperCase();
 
 dpwfHelper.setActualScriptType('start');
 
+/*
+
+	global.dpwfEngineBeforeReload = () => {
+		term.red('√ File changed DPWF HOOK');
+	};
+
+global.dpwfEngine = {
+	beforeReload: function () {
+		term.red('√ File changed DPWF HOOK');
+	}
+};*/
+
+
+
 if (buildTypeModifier) {
 	if (dpwf.product && Object.keys(dpwf.product).findIndex(val => val == buildTypeModifier) >= 0) {
 		dpwfHelper.incrementVersionAndAdjustWpInfoHeader(null, buildTypeModifier);
