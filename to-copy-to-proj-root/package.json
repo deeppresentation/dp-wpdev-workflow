@@ -25,6 +25,7 @@
         "npm": "^6.14.15",
         "npm-run-script": "0.0.4",
         "replace-string": "^3.1.0",
+        "sass": "^1.57.1",
         "simple-git": "^2.46.0",
         "snake-case": "^3.0.4",
         "terminal-kit": "^1.49.4",
@@ -52,14 +53,13 @@
         "pulldp": "gulp pulldp",
         "pushdp": "gulp pushdp",
         "prefix": "gulp prefix",
-        "js-lint": "eslint --format codeframe --ext mjs,jsx,js **/assets/js",
+        "js-lint": "eslint --format codeframe --ext mjs,jsx,js admin/assets/js public/assets/js includes/assets/js",
         "js-lint-fix": "eslint --format codeframe --ext mjs,jsx,js **/assets/js --fix",
         "php-lint": "phpcs --standard=Wordpress-Custom -n --ignore=./vendor,./node_modules,./build_tools,./_archive,./dp-wpdev-workflow,./dist,./package,./plugin-update-checker,./analyst --extensions=php ./",
         "php-lint-sum": "phpcs --standard=Wordpress-Custom --ignore=./vendor,./node_modules,./build_tools,./_archive,./dp-wpdev-workflow,./dist,./package,./plugin-update-checker,./analyst --extensions=php ./ --report=summary",
         "php-lint-fix": "phpcbf --standard=Wordpress-Custom --ignore=./vendor,./node_modules,./build_tools,./_archive,./dp-wpdev-workflow,./dist,./package,./plugin-update-checker,./analyst --extensions=php ./"
     },
     "dependencies": {
-        "@hot-loader/react-dom": "^17.0.0-rc.2",
         "@wpackio/entrypoint": "^4.3.0",
         "axios": "^0.20.0",
         "axios-error": "^1.0.0",
@@ -67,12 +67,10 @@
         "color": "^3.1.2",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",
-        "react-hot-loader": "^4.13.0",
         "react-redux": "^7.2.1",
         "react-transition-group": "^4.4.1",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
-        "url-join": "^4.0.1",
-        "envato": "^3.0.2"
+        "url-join": "^4.0.1"
     }
 }
