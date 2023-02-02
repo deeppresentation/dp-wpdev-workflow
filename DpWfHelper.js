@@ -197,6 +197,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 				},
 			],
 		},
+		//plugins: ['@babel/plugin-syntax-dynamic-import'],
 		optimization: {
 			splitChunks: {
 				chunks: 'all',
