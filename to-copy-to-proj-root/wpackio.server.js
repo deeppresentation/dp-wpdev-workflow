@@ -12,7 +12,7 @@ module.exports = {
 	// If you intend to access it from your LAN (probably do?)
 	// If you keep null, then wpackio-scripts will try to determine your LAN IP
 	// on it's own, which might not always be satisfying. But it is in most cases.
-	host: undefined,
+	host: dpwf.server.proxy,
 	// Your WordPress development server address
 	// This is super important
 	proxy: dpwf.server.proxy,
