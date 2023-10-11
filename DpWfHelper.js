@@ -528,4 +528,14 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
 
 };
 
+module.exports.updateBuilderCoreStickyJs = function () {
+	var modulesCoreJsPath = './public/assets/js/modules/core/';
+	var builderCoreJsPath = modulesCoreJsPath + 'DpitBuilderCore.js';
+	var builderCoreStickyJsPath = modulesCoreJsPath + 'DpitBuilderCoreSticky.js';
+	term.yellow('Updating DpitBuilderCoreSticky.js ... ');
+	fs.copyFileSync(builderCoreJsPath, builderCoreStickyJsPath);
+	term.green('DONE \n');
+};
+
+
 
