@@ -270,15 +270,15 @@ function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypeP
 module.exports.incrementVersion = function (currentVersion, versionTypeToIncrement = 'build') {
 	var res = currentVersion ? currentVersion : 'UNDEFINED';
 	if (currentVersion && versionTypeToIncrement) {
-		var splited = currentVersion.split('.');
-		if (splited.length >= 2) {
+		var splitted = currentVersion.split('.');
+		if (splitted.length >= 2) {
 			var build = 0;
-			if (splited.length >= 3) {
-				build = parseInt(splited[2]);
+			if (splitted.length >= 3) {
+				build = parseInt(splitted[2]);
 			}
-			var minor = parseInt(splited[1]);
-			var major = parseInt(splited[0]);
-			if (build != NaN && minor != NaN && major != NaN) {
+			var minor = parseInt(splitted[1]);
+			var major = parseInt(splitted[0]);
+			if (!isNaN(build) && !isNaN(minor) && !isNaN(major)) {
 				switch (versionTypeToIncrement) {
 					case 'B':
 					case 'b':
@@ -528,14 +528,28 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
 
 };
 
+module.exports.replaceAndSaveFileSync = function (srcPath, dstPath, searchString, replaceString) {
+	const data = fs.readFileSync(srcPath, 'utf8');
+	const updatedData = data.replace(new RegExp(searchString, 'g'), replaceString);
+	fs.writeFileSync(dstPath, updatedData, 'utf8');
+};
+
 module.exports.updateBuilderCoreStickyJs = function () {
 	var modulesCoreJsPath = './public/assets/js/modules/core/';
 	var builderCoreJsPath = modulesCoreJsPath + 'DpitBuilderCore.js';
 	var builderCoreStickyJsPath = modulesCoreJsPath + 'DpitBuilderCoreSticky.js';
 	term.yellow('Updating DpitBuilderCoreSticky.js ... ');
-	fs.copyFileSync(builderCoreJsPath, builderCoreStickyJsPath);
-	term.green('DONE \n');
+	try {
+		module.exports.replaceAndSaveFileSync(builderCoreJsPath, builderCoreStickyJsPath, 'DpitCore', 'DpitCoreSticky');
+		term.green('DONE \n');
+	}
+	catch (err) {
+		term.error(`ERROR: ${err}\n`);
+	}
 };
+
+
+
 
 
 
