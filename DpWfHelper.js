@@ -68,8 +68,8 @@ module.exports.getEntryAssetFiles = function () {
 					bundleKey, {
 					...dpwf.assets.bundles[bundleKey].files,
 					...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
-				}
-				));
+				})
+				);
 			}
 			else res.push(adjustAsDefaultAsset(bundleKey, dpwf.assets.bundles[bundleKey].files));
 		});
@@ -196,6 +196,9 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 					],
 				},
 			],
+		},
+		devServer: {
+			hot: false,
 		},
 		//plugins: ['@babel/plugin-syntax-dynamic-import'],
 		optimization: {
