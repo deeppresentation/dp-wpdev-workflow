@@ -205,7 +205,10 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 			splitChunks: {
 				chunks: 'all',
 				automaticNameDelimiter: '-',
-
+				/*name: (_, chunks) => {
+					const allChunksNames = chunks.map((chunk) => (dpwf.prefixId + '-' + chunk.name)).join('-');
+					return allChunksNames;
+				},*/
 			},
 		},
 
