@@ -151,7 +151,14 @@
 		]
 	},
 	"server": {
-		"proxy": "localhost/",
+		"proxy": "localhost",
+		"host": "localhost",
+		"bsOverride":{
+			"https":{
+				"key": "if no ssl, delete all bsOverride ...path to key",
+				"cert": "...path to cert"
+			}
+		},
 		"browserAutoOpen": false,
 		"browserSyncNotify": false,
 		"disableGhostMode": false

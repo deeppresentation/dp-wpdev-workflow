@@ -143,9 +143,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 	}
 	const customRules = {
 		devtool: disableSourceMaps ? false : 'source-map',
-
 		module: {
-
 			rules: [
 				// Config for SVGR in javascript/typescript files
 				{
