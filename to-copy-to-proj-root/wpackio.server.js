@@ -24,7 +24,7 @@ module.exports = {
 	
 	*/
 
-	bsOverride: dpwf.bsOverride, // override browsersync configuration
+	bsOverride: dpwf.server.bsOverride, // override browsersync configuration
 	// PORT on your localhost where you would want live server to hook
 	port: 3000,
 	// UI passed directly to browsersync
