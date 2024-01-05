@@ -216,6 +216,15 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 
 };
 
+module.exports.clearFolder = function (fileToRemove){
+	if (fs.pathExistsSync(fileToRemove)){
+		fs.removeSync(fileToRemove);
+		term.yellow(`√ Folder removed: ${fileToRemove} \n`);
+	} else {
+		term.red(`Directory or file doesn't exist: ${fileToRemove} \n`);
+	}
+};
+
 module.exports.writeBuildTypePhp = function (debugEn = false) {
 	const definePrefix = replaceString(dpwf.id, '-', '_').toUpperCase();
 
@@ -526,11 +535,13 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
 		}
 	}
 	else {
-		term.red(`√ Adjusting of wordpress header in ${indexPhpFile} FAILED!! (Build configuration: ${dpwf.buildType}). \n`);
+		term.red(`Adjusting of wordpress header in ${indexPhpFile} FAILED!! (Build configuration: ${dpwf.buildType}). \n`);
 	}
 
 
 };
+
+
 
 module.exports.replaceAndSaveFileSync = function (srcPath, dstPath, searchString, replaceString) {
 	const data = fs.readFileSync(srcPath, 'utf8');
