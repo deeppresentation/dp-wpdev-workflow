@@ -282,7 +282,7 @@ function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypeP
 
 module.exports.incrementVersion = function (currentVersion, versionTypeToIncrement = 'build') {
 	var res = currentVersion ? currentVersion : 'UNDEFINED';
-	if (currentVersion && versionTypeToIncrement) {
+	if (currentVersion && versionTypeToIncrement && !dpwf.incrementVersionDisabled) {
 		var splitted = currentVersion.split('.');
 		if (splitted.length >= 2) {
 			var build = 0;
