@@ -64,12 +64,13 @@ module.exports.getEntryAssetFiles = function () {
 	if (dpwf.assets.bundles) {
 		Object.keys(dpwf.assets.bundles).forEach((bundleKey) => {
 			if (dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`]) {
-				res.push(adjustAsDefaultAsset(
-					bundleKey, {
-					...dpwf.assets.bundles[bundleKey].files,
-					...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
-				})
-				);
+				res.push(
+					adjustAsDefaultAsset(
+						bundleKey, {
+							...dpwf.assets.bundles[bundleKey].files,
+							...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
+						}
+					));
 			}
 			else res.push(adjustAsDefaultAsset(bundleKey, dpwf.assets.bundles[bundleKey].files));
 		});
@@ -78,9 +79,9 @@ module.exports.getEntryAssetFiles = function () {
 		if (dpwf.assets[`files${dpwf.buildType}`]) {
 			res.push(adjustAsDefaultAsset(
 				'scriptsandstyles', {
-				...dpwf.assets.files,
-				...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
-			}));
+					...dpwf.assets.files,
+					...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
+				}));
 		}
 		else res.push(adjustAsDefaultAsset('scriptsandstyles', dpwf.assets.files));
 	}
@@ -134,7 +135,6 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		issuerForNonJsTsFiles,
 		babelLoader,
 		fileLoader,
-		// eslint-disable-next-line import/no-extraneous-dependencies
 	} = require('@wpackio/scripts');
 	isDev = isDev || dpwf.forceDebug;
 	var disableSourceMaps = false;
@@ -216,8 +216,8 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 
 };
 
-module.exports.clearFolder = function (fileToRemove){
-	if (fs.pathExistsSync(fileToRemove)){
+module.exports.clearFolder = function (fileToRemove) {
+	if (fs.pathExistsSync(fileToRemove)) {
 		fs.removeSync(fileToRemove);
 		term.yellow(`√ Folder removed: ${fileToRemove} \n`);
 	} else {

@@ -204,7 +204,7 @@ class DpWf {
 		return readdirSync(source, { withFileTypes: true })
 			.filter(dirent => dirent.isDirectory())
 			.map(dirent => path.joinSafe(source, dirent.name));
-	}
+	};
 
 	prefixPhpModules(done) {
 		if (dpwfCfg.phpScoper && dpwfCfg.phpScoper.modules) {
