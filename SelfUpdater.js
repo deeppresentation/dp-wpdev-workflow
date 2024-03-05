@@ -3,7 +3,7 @@ const path = require('upath');
 const simpleGit = require('simple-git');
 const fs = require('fs-extra');
 const term = require('terminal-kit').terminal;
-const npm = require('npm');
+
 
 class SelfUpdater {
 	constructor(moduleId) {
@@ -16,7 +16,7 @@ class SelfUpdater {
 		gulp.task('PULL_SELF', gulp.series(this.pullSelf.bind(this), this.updateProjGulpfileFromSelf.bind(this), this.updateProjPackageJsonFromSelf.bind(this)));
 	}
 
-	updateSelfFromProj(done) {
+	updateSelfFromProj() {
 		const cDir = process.cwd();
 		const packageJsonProj = require(path.joinSafe(cDir, 'package.json'));
 		const copyToRootPath = path.joinSafe(cDir, this.moduleId, 'to-copy-to-proj-root');
@@ -39,7 +39,7 @@ class SelfUpdater {
 		this.pushGitModule([path.joinSafe(dirBkp, this.moduleId)], 0, commitMessage, done);
 	}
 
-	updateProjGulpfileFromSelf(done) {
+	updateProjGulpfileFromSelf() {
 		const cDir = process.cwd();
 		const copyToRootPath = path.joinSafe(cDir, this.moduleId, 'to-copy-to-proj-root');
 		return gulp.src(path.joinSafe(copyToRootPath, 'gulpfile.js'))
@@ -47,6 +47,9 @@ class SelfUpdater {
 	}
 
 	updateProjPackageJsonFromSelf(done) {
+		function printNpmLog(message) {
+			term(message + '\n');
+		}
 		const cDir = process.cwd();
 		const packageJsonProj = require(path.joinSafe(cDir, 'package.json'));
 		const copyToRootPath = path.joinSafe(cDir, this.moduleId, 'to-copy-to-proj-root');
@@ -59,7 +62,7 @@ class SelfUpdater {
 				term.yellow('Pulling SELF: Dev dependencies in project\'s package.json are not up-to-date.\n');
 				packageJsonProj.devDependencies = packageJsonDpWf.devDependencies;
 				shouldWritePackageJson = true;
-				shouldInstallNpm = true;
+				shouldInstallNpm = false; // The programmatic API was removed in npm v8.0.0 
 			}
 			if (JSON.stringify(packageJsonDpWf.scripts) !== JSON.stringify(packageJsonProj.scripts)) {
 				term.yellow('Pulling SELF: Scripts in project\'s package.json are not up-to-date.\n');
@@ -70,20 +73,17 @@ class SelfUpdater {
 				if (shouldInstallNpm) term.yellow('Your package.json is not up-to-date. Should I update it and install missing dev dependencies? (Y/[n])\n');
 				else term.yellow('Your package.json is not up-to-date. Should I update it? (Y/[n])\n');
 				term.yesOrNo({ yes: ['y', 'ENTER'], no: ['n'] }, (error, result) => {
-					var result = true;
 					if (result) {
 						term.brightGreen('Updating package.json ... \n');
 						fs.outputJSONSync(path.joinSafe(cDir, 'package.json'), packageJsonProj, { spaces: 4 });
 
-						if (shouldInstallNpm) {
-							function printNpmLog(message) {
-								term(message + '\n');
-							}
+						/*if (shouldInstallNpm) {
+
 							if (done) done();
-							npm.load((err) => {
+							npm.load(() => {
 								term.brightGreen('Pulling SELF: Installing new dev dependencies ...\n');
 								npm.on('log', printNpmLog);
-								npm.commands.install([], function (er, data) {
+								npm.commands.install([], function (er) {
 									if (er) term.red(er + '\n');
 									npm.off('log', printNpmLog);
 									if (done) done();
@@ -91,7 +91,8 @@ class SelfUpdater {
 								});
 
 							});
-						} else if (done) done();
+						} else */
+						if (done) done();
 					} else if (done) done();
 				});
 			} else if (done) done();

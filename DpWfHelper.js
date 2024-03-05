@@ -1,11 +1,11 @@
 const dpwf = require('../dp-wpdev-workflow.json');
 const pkgjs = require('../package.json');
 const fs = require('fs-extra');
-const term = require('terminal-kit').terminal;
+
 const replaceString = require('replace-string');
+const term = require('terminal-kit').terminal;
 const path = require('upath');
 const snakeCase = require('snake-case').snakeCase;
-
 
 
 module.exports.getPackageFiles = function () {
@@ -39,6 +39,10 @@ module.exports.getPackageFilesAllBuilds = function () {
 	return files;
 };
 
+
+
+
+
 function adjustAsDefaultAsset(name, entry, webpackConfig = null) {
 
 	return {
@@ -49,6 +53,7 @@ function adjustAsDefaultAsset(name, entry, webpackConfig = null) {
 }
 
 module.exports.setActualScriptType = function (scriptType) {
+	
 	fs.outputJSONSync('./dp-wpdev-workflow/actual-script-type.json', { scriptType: scriptType }, { spaces: 4 });
 };
 

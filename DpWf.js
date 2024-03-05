@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const { readdirSync } = require('fs-extra');
+const { readdirSync } = fs;
 const path = require('upath');
 const notifier = require('node-notifier');
 const gulp = require('gulp');
