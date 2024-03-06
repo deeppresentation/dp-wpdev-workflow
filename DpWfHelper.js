@@ -155,11 +155,13 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 							options: {
 								presets: getBabelPresets(
 									getDefaultBabelPresetOptions(
-										true,
+										dpwf.hasReact,
 										isDev
 									),
 									undefined
 								),
+								plugins: ['@babel/plugin-syntax-dynamic-import']
+							
 							},
 						},
 						{
@@ -189,7 +191,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 								appDir,
 								isDev,
 								true
-							),
+							)
 						},
 					],
 				},
@@ -198,7 +200,8 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		devServer: {
 			hot: false,
 		},
-		//plugins: ['@babel/plugin-syntax-dynamic-import'],
+		
+
 		optimization: {
 			splitChunks: {
 				chunks: 'all',
@@ -211,6 +214,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		},
 
 	};
+
 	// merge and return
 	return merge(config, customRules);
 
