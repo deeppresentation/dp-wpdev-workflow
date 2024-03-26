@@ -67,9 +67,9 @@ module.exports.getEntryAssetFiles = function () {
 				res.push(
 					adjustAsDefaultAsset(
 						bundleKey, {
-							...dpwf.assets.bundles[bundleKey].files,
-							...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
-						}
+						...dpwf.assets.bundles[bundleKey].files,
+						...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
+					}
 					));
 			}
 			else res.push(adjustAsDefaultAsset(bundleKey, dpwf.assets.bundles[bundleKey].files));
@@ -79,9 +79,9 @@ module.exports.getEntryAssetFiles = function () {
 		if (dpwf.assets[`files${dpwf.buildType}`]) {
 			res.push(adjustAsDefaultAsset(
 				'scriptsandstyles', {
-					...dpwf.assets.files,
-					...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
-				}));
+				...dpwf.assets.files,
+				...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
+			}));
 		}
 		else res.push(adjustAsDefaultAsset('scriptsandstyles', dpwf.assets.files));
 	}
@@ -161,7 +161,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 									undefined
 								),
 								plugins: ['@babel/plugin-syntax-dynamic-import']
-							
+
 							},
 						},
 						{
@@ -200,7 +200,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		devServer: {
 			hot: false,
 		},
-		
+
 
 		optimization: {
 			splitChunks: {
@@ -286,7 +286,7 @@ function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypeP
 
 module.exports.incrementVersion = function (currentVersion, versionTypeToIncrement = 'build') {
 	var res = currentVersion ? currentVersion : 'UNDEFINED';
-	if (currentVersion && versionTypeToIncrement && !dpwf.incrementVersionDisabled) {
+	if (currentVersion && versionTypeToIncrement && (!dpwf.incrementVersionDisabled || versionTypeToIncrement !== 'b')) {
 		var splitted = currentVersion.split('.');
 		if (splitted.length >= 2) {
 			var build = 0;
