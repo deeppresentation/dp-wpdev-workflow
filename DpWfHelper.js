@@ -180,6 +180,11 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 						},
 					],
 				},
+				{
+					test: /\.mjs$/,
+					include: /node_modules/,
+					type: 'javascript/auto'
+				},
 				// For everything else, we use file-loader only
 				{
 					test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
