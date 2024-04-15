@@ -1,10 +1,12 @@
 const dpwf = require('../dp-wpdev-workflow.json');
 const pkgjs = require('../package.json');
 const fs = require('fs-extra');
+const camelCase = require('camelcase');
 const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
 const path = require('upath');
 const snakeCase = require('snake-case').snakeCase;
+const webpack = require('webpack');
 
 
 
@@ -65,20 +67,17 @@ module.exports.getEntryAssetFiles = function () {
 		Object.keys(dpwf.assets.bundles).forEach((bundleKey) => {
 			if (dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`]) {
 				res.push(
-					adjustAsDefaultAsset(
-						bundleKey, {
+					adjustAsDefaultAsset(bundleKey, {
 						...dpwf.assets.bundles[bundleKey].files,
 						...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
-					}
-					));
+					}));
 			}
 			else res.push(adjustAsDefaultAsset(bundleKey, dpwf.assets.bundles[bundleKey].files));
 		});
 	}
 	else {
 		if (dpwf.assets[`files${dpwf.buildType}`]) {
-			res.push(adjustAsDefaultAsset(
-				'scriptsandstyles', {
+			res.push(adjustAsDefaultAsset('scriptsandstyles', {
 				...dpwf.assets.files,
 				...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
 			}));
@@ -136,7 +135,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		babelLoader,
 		fileLoader,
 	} = require('@wpackio/scripts');
-	isDev = isDev || dpwf.forceDebug;
+	isDev = isDev || dpwf.forceDebug || true;
 	var disableSourceMaps = false;
 	if (!isDev) {
 		disableSourceMaps = !dpwf.forceDebug && module.exports.getSubItemPerBuild('product', 'sourceMapsDisable', false);
@@ -160,7 +159,20 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 									),
 									undefined
 								),
-								plugins: ['@babel/plugin-syntax-dynamic-import']
+								plugins: [
+									//'@babel/plugin-syntax-dynamic-import',
+									// Define env
+									new webpack.DefinePlugin({
+										'process.env.NODE_ENV': 'production',// JSON.stringify(this.env)
+										'process.env.BABEL_ENV': 'production',// JSON.stringify(this.env)
+										// Our own access to project config from the modules
+										// mainly needed for the publicPath entrypoint
+										__WPACKIO__: {
+											appName: camelCase(dpwf.id),
+											outputPath: dpwf.assets.dir,
+										},
+									}),
+								]
 
 							},
 						},
