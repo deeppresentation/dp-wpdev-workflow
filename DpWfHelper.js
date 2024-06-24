@@ -1,12 +1,12 @@
 const dpwf = require('../dp-wpdev-workflow.json');
 const pkgjs = require('../package.json');
 const fs = require('fs-extra');
-const camelCase = require('camelcase');
+//const camelCase = require('camelcase');
 const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
 const path = require('upath');
 const snakeCase = require('snake-case').snakeCase;
-const webpack = require('webpack');
+//const webpack = require('webpack');
 
 
 
@@ -162,7 +162,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 								plugins: [
 									//'@babel/plugin-syntax-dynamic-import',
 									// Define env
-									new webpack.DefinePlugin({
+									/*new webpack.DefinePlugin({
 										'process.env.NODE_ENV': 'production',// JSON.stringify(this.env)
 										'process.env.BABEL_ENV': 'production',// JSON.stringify(this.env)
 										// Our own access to project config from the modules
@@ -171,7 +171,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 											appName: camelCase(dpwf.id),
 											outputPath: dpwf.assets.dir,
 										},
-									}),
+									}),*/
 								]
 
 							},
