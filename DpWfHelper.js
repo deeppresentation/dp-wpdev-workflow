@@ -135,7 +135,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		babelLoader,
 		fileLoader,
 	} = require('@wpackio/scripts');
-	isDev = isDev || dpwf.forceDebug || true;
+	isDev = isDev || dpwf.forceDebug;
 	var disableSourceMaps = false;
 	if (!isDev) {
 		disableSourceMaps = !dpwf.forceDebug && module.exports.getSubItemPerBuild('product', 'sourceMapsDisable', false);
