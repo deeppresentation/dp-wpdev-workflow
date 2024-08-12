@@ -215,7 +215,7 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 			],
 		},
 		devServer: {
-			hot: false,
+			hot: true,
 		},
 
 
