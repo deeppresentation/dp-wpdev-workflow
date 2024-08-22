@@ -42,10 +42,17 @@ module.exports.getPackageFilesAllBuilds = function () {
 };
 
 function adjustAsDefaultAsset(name, entry, webpackConfig = null) {
-
+	const finalEntry = {};
+	Object.keys(entry).forEach((key) => {
+		if (false && entry[key].endsWith('.js') || entry[key].endsWith('.ts')) { // Test to make dynamic import of scripts work https://wpack.io/concepts/how-publicpath-works/
+			finalEntry[key] = ['@wpackio/entrypoint/lib/index.js', entry[key]];
+		} else {
+			finalEntry[key] = entry[key];
+		}
+	});
 	return {
 		name: name,
-		entry: entry,
+		entry: finalEntry,
 		webpackConfig: webpackConfig ? webpackConfig : module.exports.getCustomizeWebPackCfgFce,
 	};
 }
@@ -144,7 +151,6 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		devtool: disableSourceMaps ? false : 'source-map',
 		module: {
 			rules: [
-				// Config for SVGR in javascript/typescript files
 				{
 					test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
 					issuer: issuerForJsTsFiles,
@@ -157,22 +163,8 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 										dpwf.hasReact,
 										isDev
 									),
-									undefined
+									true
 								),
-								plugins: [
-									//'@babel/plugin-syntax-dynamic-import',
-									// Define env
-									/*new webpack.DefinePlugin({
-										'process.env.NODE_ENV': 'production',// JSON.stringify(this.env)
-										'process.env.BABEL_ENV': 'production',// JSON.stringify(this.env)
-										// Our own access to project config from the modules
-										// mainly needed for the publicPath entrypoint
-										__WPACKIO__: {
-											appName: camelCase(dpwf.id),
-											outputPath: dpwf.assets.dir,
-										},
-									}),*/
-								]
 
 							},
 						},
@@ -218,7 +210,6 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 			hot: true,
 		},
 
-
 		optimization: {
 			splitChunks: {
 				chunks: 'all',
@@ -229,9 +220,19 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 				},*/
 			},
 		},
-
+		/*plugins: [
+			new webpack.DefinePlugin({
+				'process.env.NODE_ENV': JSON.stringify(this.env),
+				'process.env.BABEL_ENV': JSON.stringify(this.env),
+				// Our own access to project config from the modules
+				// mainly needed for the publicPath entrypoint
+				__WPACKIO__: {
+					appName: camelCase(dpwf.id),
+					outputPath: dpwf.assets.dir,
+				},
+			}),
+		],*/
 	};
-
 	// merge and return
 	return merge(config, customRules);
 
