@@ -42,17 +42,17 @@ module.exports.getPackageFilesAllBuilds = function () {
 };
 
 function adjustAsDefaultAsset(name, entry, webpackConfig = null) {
-	const finalEntry = {};
+	/*const finalEntry = {};
 	Object.keys(entry).forEach((key) => {
 		if (false && entry[key].endsWith('.js') || entry[key].endsWith('.ts')) { // Test to make dynamic import of scripts work https://wpack.io/concepts/how-publicpath-works/
 			finalEntry[key] = ['@wpackio/entrypoint/lib/index.js', entry[key]];
 		} else {
 			finalEntry[key] = entry[key];
 		}
-	});
+	});*/
 	return {
 		name: name,
-		entry: finalEntry,
+		entry: entry,
 		webpackConfig: webpackConfig ? webpackConfig : module.exports.getCustomizeWebPackCfgFce,
 	};
 }
