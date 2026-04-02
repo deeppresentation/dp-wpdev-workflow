@@ -12,7 +12,7 @@ const dpLogo = 'DP-logo.png';
 const cleanDest = require('gulp-clean-dest');
 const merge = require('merge-stream');
 const replace = require('gulp-batch-replace');
-const run = require('gulp-run');
+const { exec } = require('child_process');
 
 
 const SELF_ROOT_DIR = 'dp-wpdev-workflow';
@@ -46,13 +46,14 @@ class DpWf {
 			this.notifyDeploy2FtpProd.bind(this))
 		);
 		gulp.task('DEPLOY_2_DP', gulp.series(
+			this.backupPackage.bind(this),
 			this.deployPack2Dp.bind(this),
 			this.notifyDeployPack2Dp.bind(this),
 			this.deployPack2DpBC.bind(this),
 			this.notifyDeployPack2DpBC.bind(this)
 		));
 
-		gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.clearWordpressOrgTrunk.bind(this), this.deploy2WordpressOrg.bind(this)));
+		gulp.task('DEPLOY_2_WP_ORG', gulp.series(this.guardWpOrgDeploy.bind(this), this.clearWordpressOrgTrunk.bind(this), this.deploy2WordpressOrg.bind(this), this.deploy2WordpressOrgTag.bind(this)));
 
 		gulp.task('PREFIX_PHP_MODULES', gulp.series(this.prefixPhpModules.bind(this), this.dumpAutoload.bind(this)));
 
@@ -63,11 +64,27 @@ class DpWf {
 
 
 	_runBuild() {
-		return run('node dp-wpdev-workflow/dp-build b').exec();    // run "npm start". 
+		return new Promise((resolve, reject) => {
+			const proc = exec('node dp-wpdev-workflow/dp-build 0', { maxBuffer: 10 * 1024 * 1024 });
+			proc.stdout.pipe(process.stdout);
+			proc.stderr.pipe(process.stderr);
+			proc.on('close', (code) => {
+				if (code === 0) resolve();
+				else reject(new Error(`dp-build exited with code ${code}`));
+			});
+		});
 	}
 
 	_runPack() {
-		return run('node dp-wpdev-workflow/dp-pack').exec();    // run "npm start". 
+		return new Promise((resolve, reject) => {
+			const proc = exec('node dp-wpdev-workflow/dp-pack', { maxBuffer: 10 * 1024 * 1024 });
+			proc.stdout.pipe(process.stdout);
+			proc.stderr.pipe(process.stderr);
+			proc.on('close', (code) => {
+				if (code === 0) resolve();
+				else reject(new Error(`dp-pack exited with code ${code}`));
+			});
+		});
 	}
 
 	_getPackageFilesAllBuilds(root) {
@@ -88,6 +105,16 @@ class DpWf {
 	}
 
 
+
+	backupPackage(done) {
+		if (this.config.proReleasesBackupDir) {
+			const version = dpWfHelper.getSubItemPerBuild('product', 'version');
+			const backupDest = path.joinSafe(this.config.proReleasesBackupDir, version);
+			return gulp.src(path.joinSafe(this.config.package.dir, dpWfHelper.getPackageId() + '.zip'), { base: path.joinSafe('.', this.config.package.dir), buffer: false })
+				.pipe(gulp.dest(backupDest));
+		}
+		else if (done) done();
+	}
 
 	_deployPack2Dp(done, ftpDir) {
 		if (this.config.packageFtp && ftpDir) {
@@ -204,7 +231,7 @@ class DpWf {
 		return readdirSync(source, { withFileTypes: true })
 			.filter(dirent => dirent.isDirectory())
 			.map(dirent => path.joinSafe(source, dirent.name));
-	}
+	};
 
 	prefixPhpModules(done) {
 		if (dpwfCfg.phpScoper && dpwfCfg.phpScoper.modules) {
@@ -282,6 +309,13 @@ class DpWf {
 		}
 	}
 
+	guardWpOrgDeploy(done) {
+		if (this.config.buildType && this.config.buildType.toUpperCase() === 'PRO') {
+			throw new Error('❌ DEPLOY_2_WP_ORG is not allowed when buildType is "PRO". WordPress.org only accepts the FREE version.');
+		}
+		if (done) done();
+	}
+
 	clearWordpressOrgTrunk(done) {
 		const wporgTrunkPath = path.joinSafe(this.config.wordpressOrgSvnBaseDir, this.config.id, 'trunk');
 		if (fs.existsSync(wporgTrunkPath)) {
@@ -294,6 +328,12 @@ class DpWf {
 	deploy2WordpressOrg() {
 		return gulp.src(path.joinSafe(this.config.package.dir, this.config.id, '**', '*'))
 			.pipe(gulp.dest(path.joinSafe(this.config.wordpressOrgSvnBaseDir, this.config.id, 'trunk')));
+	}
+
+	deploy2WordpressOrgTag() {
+		const version = dpWfHelper.getSubItemPerBuild('product', 'version');
+		return gulp.src(path.joinSafe(this.config.package.dir, this.config.id, '**', '*'))
+			.pipe(gulp.dest(path.joinSafe(this.config.wordpressOrgSvnBaseDir, this.config.id, 'tags', version)));
 	}
 }
 
