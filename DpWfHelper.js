@@ -1,10 +1,12 @@
 const dpwf = require('../dp-wpdev-workflow.json');
 const pkgjs = require('../package.json');
 const fs = require('fs-extra');
+//const camelCase = require('camelcase');
 const term = require('terminal-kit').terminal;
 const replaceString = require('replace-string');
 const path = require('upath');
 const snakeCase = require('snake-case').snakeCase;
+//const webpack = require('webpack');
 
 
 
@@ -40,7 +42,14 @@ module.exports.getPackageFilesAllBuilds = function () {
 };
 
 function adjustAsDefaultAsset(name, entry, webpackConfig = null) {
-
+	/*const finalEntry = {};
+	Object.keys(entry).forEach((key) => {
+		if (false && entry[key].endsWith('.js') || entry[key].endsWith('.ts')) { // Test to make dynamic import of scripts work https://wpack.io/concepts/how-publicpath-works/
+			finalEntry[key] = ['@wpackio/entrypoint/lib/index.js', entry[key]];
+		} else {
+			finalEntry[key] = entry[key];
+		}
+	});*/
 	return {
 		name: name,
 		entry: entry,
@@ -64,20 +73,18 @@ module.exports.getEntryAssetFiles = function () {
 	if (dpwf.assets.bundles) {
 		Object.keys(dpwf.assets.bundles).forEach((bundleKey) => {
 			if (dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`]) {
-				res.push(adjustAsDefaultAsset(
-					bundleKey, {
-					...dpwf.assets.bundles[bundleKey].files,
-					...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
-				})
-				);
+				res.push(
+					adjustAsDefaultAsset(bundleKey, {
+						...dpwf.assets.bundles[bundleKey].files,
+						...(dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`] && dpwf.assets.bundles[bundleKey][`files${dpwf.buildType}`])
+					}));
 			}
 			else res.push(adjustAsDefaultAsset(bundleKey, dpwf.assets.bundles[bundleKey].files));
 		});
 	}
 	else {
 		if (dpwf.assets[`files${dpwf.buildType}`]) {
-			res.push(adjustAsDefaultAsset(
-				'scriptsandstyles', {
+			res.push(adjustAsDefaultAsset('scriptsandstyles', {
 				...dpwf.assets.files,
 				...(dpwf.assets[`files${dpwf.buildType}`] && dpwf.assets[`files${dpwf.buildType}`])
 			}));
@@ -134,7 +141,6 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 		issuerForNonJsTsFiles,
 		babelLoader,
 		fileLoader,
-		// eslint-disable-next-line import/no-extraneous-dependencies
 	} = require('@wpackio/scripts');
 	isDev = isDev || dpwf.forceDebug;
 	var disableSourceMaps = false;
@@ -143,11 +149,8 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 	}
 	const customRules = {
 		devtool: disableSourceMaps ? false : 'source-map',
-
 		module: {
-
 			rules: [
-				// Config for SVGR in javascript/typescript files
 				{
 					test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
 					issuer: issuerForJsTsFiles,
@@ -157,11 +160,12 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 							options: {
 								presets: getBabelPresets(
 									getDefaultBabelPresetOptions(
-										true,
+										dpwf.hasReact,
 										isDev
 									),
-									undefined
+									true
 								),
+
 							},
 						},
 						{
@@ -180,6 +184,11 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 						},
 					],
 				},
+				{
+					test: /\.mjs$/,
+					include: /node_modules/,
+					type: 'javascript/auto'
+				},
 				// For everything else, we use file-loader only
 				{
 					test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
@@ -191,16 +200,16 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 								appDir,
 								isDev,
 								true
-							),
+							)
 						},
 					],
 				},
 			],
 		},
 		devServer: {
-			hot: false,
+			hot: true,
 		},
-		//plugins: ['@babel/plugin-syntax-dynamic-import'],
+
 		optimization: {
 			splitChunks: {
 				chunks: 'all',
@@ -211,11 +220,31 @@ module.exports.getCustomizeWebPackCfgFce = (config, merge, appDir, isDev) => {
 				},*/
 			},
 		},
-
+		/*plugins: [
+			new webpack.DefinePlugin({
+				'process.env.NODE_ENV': JSON.stringify(this.env),
+				'process.env.BABEL_ENV': JSON.stringify(this.env),
+				// Our own access to project config from the modules
+				// mainly needed for the publicPath entrypoint
+				__WPACKIO__: {
+					appName: camelCase(dpwf.id),
+					outputPath: dpwf.assets.dir,
+				},
+			}),
+		],*/
 	};
 	// merge and return
 	return merge(config, customRules);
 
+};
+
+module.exports.clearFolder = function (fileToRemove) {
+	if (fs.pathExistsSync(fileToRemove)) {
+		fs.removeSync(fileToRemove);
+		term.yellow(`√ Folder removed: ${fileToRemove} \n`);
+	} else {
+		term.red(`Directory or file doesn't exist: ${fileToRemove} \n`);
+	}
 };
 
 module.exports.writeBuildTypePhp = function (debugEn = false) {
@@ -275,7 +304,7 @@ function getDefineInBuildType(definePrefix, itemName, subItemName, addBuildTypeP
 
 module.exports.incrementVersion = function (currentVersion, versionTypeToIncrement = 'build') {
 	var res = currentVersion ? currentVersion : 'UNDEFINED';
-	if (currentVersion && versionTypeToIncrement) {
+	if (currentVersion && versionTypeToIncrement && (!dpwf.incrementVersionDisabled || versionTypeToIncrement !== 'b')) {
 		var splitted = currentVersion.split('.');
 		if (splitted.length >= 2) {
 			var build = 0;
@@ -528,11 +557,13 @@ module.exports.incrementVersionAndAdjustWpInfoHeader = function (versionTypeToIn
 		}
 	}
 	else {
-		term.red(`√ Adjusting of wordpress header in ${indexPhpFile} FAILED!! (Build configuration: ${dpwf.buildType}). \n`);
+		term.red(`Adjusting of wordpress header in ${indexPhpFile} FAILED!! (Build configuration: ${dpwf.buildType}). \n`);
 	}
 
 
 };
+
+
 
 module.exports.replaceAndSaveFileSync = function (srcPath, dstPath, searchString, replaceString) {
 	const data = fs.readFileSync(srcPath, 'utf8');

@@ -33,7 +33,7 @@ if (buildTypeModifier) {
 	}
 }
 else {
-	dpwfHelper.incrementVersionAndAdjustWpInfoHeader(null, null);
+	//dpwfHelper.incrementVersionAndAdjustWpInfoHeader(null, null);
 	dpwfHelper.writeBuildTypePhp(true);// add PRO or FREE define to dp-build-type.php
 	npmRunScript('wpackio-scripts start');
 }
